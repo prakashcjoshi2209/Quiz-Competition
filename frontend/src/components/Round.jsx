@@ -296,7 +296,7 @@ const Round = () => {
           </button>
         )}
 
-<p className="mt-4 text-xl text-purple-600">Your Score: {score}</p>
+
       </div>
 
       {/* Modal for Confirm Submit */}
