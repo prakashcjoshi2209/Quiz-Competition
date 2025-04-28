@@ -23,7 +23,17 @@ const Dashboard = () => {
   };
 
   const handleOk = () => {
-    navigate('/round1');
+    // Check the modal content and navigate accordingly
+    if (modalContent.includes('Round 1')) {
+      navigate('/round1');
+    } else if (modalContent.includes('Round 2')) {
+      navigate('/round2');
+    } else if (modalContent.includes('Round 3')) {
+      navigate('/round3');
+    } else if (modalContent.includes('Leaderboard')) {
+      navigate('/leader');
+    }
+
     closeModal();
   };
 
