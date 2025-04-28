@@ -2,31 +2,45 @@
 // import axios from 'axios'; // Import axios for making API requests
 
 // const Leaderboard = () => {
-//   const [teams, setTeams] = useState([]); // State to store team data
-//   const [loading, setLoading] = useState(true); // Loading state to show a spinner while fetching data
-//   const [error, setError] = useState(null); // Error state to handle errors
+//   const [teamsRound1, setTeamsRound1] = useState([]); // Round 1 teams (fetched from backend)
+//   const [teamsRound2, setTeamsRound2] = useState([    // Static Dummy Data for Round 2
+//     { teamName: "Alpha Warriors", score: 95 },
+//     { teamName: "Beta Squad", score: 89 },
+//     { teamName: "Gamma Fighters", score: 80 },
+//     { teamName: "Delta Force", score: 70 },
+//     { teamName: "Epsilon Eagles", score: 68 },
+//     { teamName: "Zeta Smashers", score: 65 },
+//     { teamName: "Theta Hunters", score: 62 },
+//     { teamName: "Sigma Runners", score: 60 },
+//     { teamName: "Omega Legends", score: 58 },
+//     { teamName: "Lambda Warriors", score: 55 }
+//   ]);
+//   const [currentRound, setCurrentRound] = useState(1); // To track selected round
+//   const [loading, setLoading] = useState(true); // Loading state
+//   const [error, setError] = useState(null); // Error state
 
 //   useEffect(() => {
-//     // Fetch leaderboard data from your backend
+//     // Fetch leaderboard data for Round 1
 //     const fetchLeaderboard = async () => {
 //       try {
-//         // Assuming this is your endpoint to get the leaderboard data
-//         const response = await axios.get('http://localhost:5000/api/auth/leaderboard'); // Replace with the correct endpoint
+//         const response = await axios.get('http://localhost:5000/api/auth/leaderboard');
 //         const leaderboardData = response.data;
 
-//         // Sort the leaderboard data by score in descending order
 //         leaderboardData.sort((a, b) => b.score - a.score);
 
-//         setTeams(leaderboardData); // Set the fetched data to the state
-//         setLoading(false); // Set loading to false after data is fetched
+//         setTeamsRound1(leaderboardData);
+//         setLoading(false);
 //       } catch (err) {
-//         setError('Failed to fetch leaderboard data.'); // Handle error
+//         setError('Failed to fetch leaderboard data.');
 //         setLoading(false);
 //       }
 //     };
 
-//     fetchLeaderboard(); // Call the fetch function on component mount
-//   }, []); // Empty dependency array to run the effect only once on component mount
+//     fetchLeaderboard();
+//   }, []);
+
+//   // Decide which data to show
+//   const teamsToDisplay = currentRound === 1 ? teamsRound1 : teamsRound2;
 
 //   if (loading) {
 //     return (
@@ -48,7 +62,23 @@
 
 //   return (
 //     <div className="min-h-screen bg-gray-100 p-6">
-//       <h1 className="text-4xl font-bold text-center text-purple-700 mb-8">Leaderboard</h1>
+//       <h1 className="text-4xl font-bold text-center text-purple-700 mb-8">Leaderboard - Round {currentRound}</h1>
+
+//       {/* Buttons to switch round */}
+//       <div className="flex justify-center mb-6 gap-4">
+//         <button 
+//           onClick={() => setCurrentRound(1)} 
+//           className={`px-4 py-2 rounded-full font-semibold ${currentRound === 1 ? 'bg-purple-700 text-white' : 'bg-gray-300 text-gray-700'}`}
+//         >
+//           Round 1
+//         </button>
+//         <button 
+//           onClick={() => setCurrentRound(2)} 
+//           className={`px-4 py-2 rounded-full font-semibold ${currentRound === 2 ? 'bg-purple-700 text-white' : 'bg-gray-300 text-gray-700'}`}
+//         >
+//           Round 2
+//         </button>
+//       </div>
 
 //       <div className="max-w-2xl mx-auto bg-white p-6 rounded-3xl shadow-xl">
 //         <div className="flex justify-between items-center mb-4">
@@ -58,15 +88,27 @@
 
 //         {/* Display each team in the leaderboard */}
 //         <div>
-//           {teams.map((team, index) => (
-//             <div
-//               key={index}
-//               className={`flex justify-between items-center py-3 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-gray-100'} rounded-md`}
-//             >
-//               <span className="text-lg text-purple-700">{team.name}</span>
-//               <span className="text-lg text-purple-700">{team.score}</span>
-//             </div>
-//           ))}
+//           {teamsToDisplay.map((team, index) => {
+//             let bgColor = '';
+
+//             if (currentRound === 1) {
+//               // Round 1 Logic: Top 10 -> Green, Others -> Red
+//               bgColor = index < 10 ? 'bg-green-200' : 'bg-red-200';
+//             } else {
+//               // Round 2 Logic: Top 5 -> Green, Others -> Red
+//               bgColor = index < 5 ? 'bg-green-200' : 'bg-red-200';
+//             }
+
+//             return (
+//               <div
+//                 key={index}
+//                 className={`flex justify-between items-center py-3 px-4 my-2 rounded-md ${bgColor}`}
+//               >
+//                 <span className="text-lg font-semibold text-purple-700">{team.teamName || team.name}</span>
+//                 <span className="text-lg font-semibold text-purple-700">{team.score}</span>
+//               </div>
+//             );
+//           })}
 //         </div>
 //       </div>
 //     </div>
@@ -76,36 +118,63 @@
 // export default Leaderboard;
 
 
-
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import axios for making API requests
+import axios from 'axios';
 
 const Leaderboard = () => {
-  const [teams, setTeams] = useState([]); // State to store team data
-  const [loading, setLoading] = useState(true); // Loading state to show a spinner while fetching data
-  const [error, setError] = useState(null); // Error state to handle errors
+  const [teamsRound1, setTeamsRound1] = useState([]);
+  const [teamsRound2, setTeamsRound2] = useState([
+    { teamName: "Alpha Warriors", score: 95 },
+    { teamName: "Beta Squad", score: 89 },
+    { teamName: "Gamma Fighters", score: 80 },
+    { teamName: "Delta Force", score: 70 },
+    { teamName: "Epsilon Eagles", score: 68 },
+    { teamName: "Zeta Smashers", score: 65 },
+    { teamName: "Theta Hunters", score: 62 },
+    { teamName: "Sigma Runners", score: 60 },
+    { teamName: "Omega Legends", score: 58 },
+    { teamName: "Lambda Warriors", score: 55 }
+  ]);
+  const [currentRound, setCurrentRound] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [round2AccessGranted, setRound2AccessGranted] = useState(false); // <-- New State
 
   useEffect(() => {
-    // Fetch leaderboard data from your backend
     const fetchLeaderboard = async () => {
       try {
-        // Assuming this is your endpoint to get the leaderboard data
-        const response = await axios.get('http://localhost:5000/api/auth/leaderboard'); // Replace with the correct endpoint
+        const response = await axios.get('http://localhost:5000/api/auth/leaderboard');
         const leaderboardData = response.data;
 
-        // Sort the leaderboard data by score in descending order
         leaderboardData.sort((a, b) => b.score - a.score);
 
-        setTeams(leaderboardData); // Set the fetched data to the state
-        setLoading(false); // Set loading to false after data is fetched
+        setTeamsRound1(leaderboardData);
+        setLoading(false);
       } catch (err) {
-        setError('Failed to fetch leaderboard data.'); // Handle error
+        setError('Failed to fetch leaderboard data.');
         setLoading(false);
       }
     };
 
-    fetchLeaderboard(); // Call the fetch function on component mount
-  }, []); // Empty dependency array to run the effect only once on component mount
+    fetchLeaderboard();
+  }, []);
+
+  const teamsToDisplay = currentRound === 1 ? teamsRound1 : teamsRound2;
+
+  // New: Handle Round 2 button click
+  const handleRound2Click = () => {
+    if (round2AccessGranted) {
+      setCurrentRound(2);
+    } else {
+      const password = prompt('Enter Password for Round 2');
+      if (password === '22093010') {
+        setRound2AccessGranted(true);
+        setCurrentRound(2);
+      } else {
+        alert('Incorrect Password!');
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -127,7 +196,23 @@ const Leaderboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-4xl font-bold text-center text-purple-700 mb-8">Leaderboard</h1>
+      <h1 className="text-4xl font-bold text-center text-purple-700 mb-8">Leaderboard - Round {currentRound}</h1>
+
+      {/* Buttons to switch round */}
+      <div className="flex justify-center mb-6 gap-4">
+        <button 
+          onClick={() => setCurrentRound(1)} 
+          className={`px-4 py-2 rounded-full font-semibold ${currentRound === 1 ? 'bg-purple-700 text-white' : 'bg-gray-300 text-gray-700'}`}
+        >
+          Round 1
+        </button>
+        <button 
+          onClick={handleRound2Click} 
+          className={`px-4 py-2 rounded-full font-semibold ${currentRound === 2 ? 'bg-purple-700 text-white' : 'bg-gray-300 text-gray-700'}`}
+        >
+          Round 2
+        </button>
+      </div>
 
       <div className="max-w-2xl mx-auto bg-white p-6 rounded-3xl shadow-xl">
         <div className="flex justify-between items-center mb-4">
@@ -137,15 +222,25 @@ const Leaderboard = () => {
 
         {/* Display each team in the leaderboard */}
         <div>
-          {teams.map((team, index) => (
-            <div
-              key={index}
-              className={`flex justify-between items-center py-3 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-gray-100'} rounded-md`}
-            >
-              <span className="text-lg text-purple-700">{team.teamName || team.name}</span> {/* Ensure you are accessing the correct field */}
-              <span className="text-lg text-purple-700">{team.score}</span>
-            </div>
-          ))}
+          {teamsToDisplay.map((team, index) => {
+            let bgColor = '';
+
+            if (currentRound === 1) {
+              bgColor = index < 10 ? 'bg-green-200' : 'bg-red-200';
+            } else {
+              bgColor = index < 5 ? 'bg-green-200' : 'bg-red-200';
+            }
+
+            return (
+              <div
+                key={index}
+                className={`flex justify-between items-center py-3 px-4 my-2 rounded-md ${bgColor}`}
+              >
+                <span className="text-lg font-semibold text-purple-700">{team.teamName || team.name}</span>
+                <span className="text-lg font-semibold text-purple-700">{team.score}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
