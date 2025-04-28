@@ -5,27 +5,153 @@ import 'react-toastify/dist/ReactToastify.css';  // CSS for toastify
 const questionsData = [
   {
     id: 'q1',  // Unique ID for the question
-    questionImage: 'https://example.com/image1.jpg', // Question Image URL
-    options: ['2 Bytes', '4 Bytes', '8 Bytes', 'Depends on Compiler'],
-    correctAnswer: 'Depends on Compiler',
+    questionImage: '/img1.png', // Question Image URL
+    options: ['2,7', '7,2', '5,2', '2,5'],
+    correctAnswer: '7,2',
   },
   {
     id: 'q2',  // Unique ID for the question
-    questionImage: 'https://example.com/image2.jpg', // Question Image URL
-    options: ['class', 'volatile', 'interface', 'extends'],
-    correctAnswer: 'volatile',
+    questionImage: 'img2.png', // Question Image URL
+    options: ['12,4', '4,12', '4', '2'],
+    correctAnswer: '12,4',
   },
   {
     id: 'q3',  // Unique ID for the question
-    questionImage: 'https://example.com/image3.jpg', // Question Image URL
-    options: ['&', '*', '->', '%'],
-    correctAnswer: '*',
+    questionImage: 'img3.png', // Question Image URL
+    options: ['Logical Error', '300', '200', 'Compilation Error'],
+    correctAnswer: '200',
   },
   {
     id: 'q4',  // Unique ID for the question
-    questionImage: 'https://example.com/image4.jpg', // Question Image URL
-    options: ['Bjarne Stroustrup', 'James Gosling', 'Dennis Ritchie', 'Guido van Rossum'],
-    correctAnswer: 'Dennis Ritchie',
+    questionImage: 'img4.png', // Question Image URL
+    options: ['No Output', '10,20', '1', 'Error'],
+    correctAnswer: '10,20',
+  },
+  {
+    id: 'q5',  // Unique ID for the question
+    questionImage: 'img5.png', // Question Image URL
+    options: ['C is WOW', 'C is Headache', '0', 'Error'],
+    correctAnswer: 'C is WOW',
+  },
+  {
+    id: 'q6',  // Unique ID for the question
+    questionImage: 'img6.png', // Question Image URL
+    options: ['Error', '0 15 15', '15 15 15', '15 15 0'],
+    correctAnswer: '15 15 0',
+  },
+  {
+    id: 'q7',  // Unique ID for the question
+    questionImage: 'img7.png', // Question Image URL
+    options: ['Counting 1 to 10', 'Counting 0 to 9', 'Counting 1 to 9', 'Error'],
+    correctAnswer: 'Counting 1 to 10',
+  },
+  {
+    id: 'q8',  // Unique ID for the question
+    questionImage: 'img8.png', // Question Image URL
+    options: ['11', '12', '10', 'Error'],
+    correctAnswer: '10',
+  },
+  {
+    id: 'q9',  // Unique ID for the question
+    questionImage: 'img9.png', // Question Image URL
+    options: ['20', '18', '21', 'Error'],
+    correctAnswer: '21',
+  },
+  {
+    id: 'q10',  // Unique ID for the question
+    questionImage: 'img10.png', // Question Image URL
+    options: ['Size in Bits', 'Size in Bytes', '4 Bytes', '2 Bytes'],
+    correctAnswer: 'Size in Bytes',
+  },
+  {
+    id: 'q11',  // Unique ID for the question
+    questionImage: 'img11.png', // Question Image URL
+    options: ['Counting 1 to 10', 'Undefined', 'Compilation Error', 'Infinit Loop'],
+    correctAnswer: 'Counting 1 to 10',
+  },
+  {
+    id: 'q12',  // Unique ID for the question
+    questionImage: 'img12.png', // Question Image URL
+    options: ['HelloHi', 'Error', 'Undefined', 'Scope Out of Bound'],
+    correctAnswer: 'HelloHi',
+  },
+  {
+    id: 'q13',  // Unique ID for the question
+    questionImage: 'img13.png', // Question Image URL
+    options: ['24', '24.2', 'Syntax Error', 'Logical Error'],
+    correctAnswer: '24',
+  },
+  {
+    id: 'q14',  // Unique ID for the question
+    questionImage: 'img14.png', // Question Image URL
+    options: ['Error', '24', '24.2', '0'],
+    correctAnswer: 'Error',
+  },
+  {
+    id: 'q15',  // Unique ID for the question
+    questionImage: 'img15.png', // Question Image URL
+    options: ['Error', '1,2,3', '1', '123'],
+    correctAnswer: 'Error',
+  },
+  {
+    id: 'q16',  // Unique ID for the question
+    questionImage: 'img16.png', // Question Image URL
+    options: ['1,2,3', '3', 'Undefined', 'Error'],
+    correctAnswer: '3',
+  },
+  {
+    id: 'q17',  // Unique ID for the question
+    questionImage: 'img17.png', // Question Image URL
+    options: ['TRUE', 'Error', 'FALSE', '0'],
+    correctAnswer: 'FALSE',
+  },
+  {
+    id: 'q18',  // Unique ID for the question
+    questionImage: 'img18.png', // Question Image URL
+    options: ['3 2', '3 4', '4 3', '3 3'],
+    correctAnswer: '3 3',
+  },
+  {
+    id: 'q19',  // Unique ID for the question
+    questionImage: 'img19.png', // Question Image URL
+    options: ['0 Extra Variable', '1 Extra Variable', '2 Extra Variable', '3 Extra Variable'],
+    correctAnswer: '0 Extra Variable',
+  },
+  {
+    id: 'q20',  // Unique ID for the question
+    questionImage: 'img20.png', // Question Image URL
+    options: ['Some Random Value', 'Compilation Error', 'Address to the main function', 'Cannot call main more than once'],
+    correctAnswer: 'Address to the main function',
+  },
+  {
+    id: 'q21',  // Unique ID for the question
+    questionImage: 'img21.png', // Question Image URL
+    options: ['Undefined', '20', '10', '14'],
+    correctAnswer: '14',
+  },
+  {
+    id: 'q22',  // Unique ID for the question
+    questionImage: 'img22.png', // Question Image URL
+    options: ['2 Bytes', '4 Bytes', '1 Bytes', 'Depending on the system'],
+    correctAnswer: 'Depending on the system',
+  },
+  {
+    id: 'q23',  // Unique ID for the question
+    questionImage: 'img23.png', // Question Image URL
+    options: ['Error', 'Some ASCII values', 'Character given by user', 'Syntax Error'],
+    correctAnswer: 'Character given by user',
+  },
+  {
+    id: 'q24',  // Unique ID for the question
+    questionImage: 'img24.png', // Question Image URL
+    options: ['16 21', '21 16', '5', '16'],
+    correctAnswer: '16 21',
+  },
+  {
+    id: 'q25',  // Unique ID for the question
+    questionImage: 'img25.png', // Question Image URL
+    options: ['110', '60', '0', '50'],
+    correctAnswer: '0',
   },
 ];
 
