@@ -1,8 +1,37 @@
 import express from 'express';
-import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
+import Score from '../models/Score.js';
+import User from '../models/User.js';
 
 const router = express.Router();
+
+// Score Route: POST /api/submit-score
+router.post('/submit', async (req, res) => {
+  const { teamName, score } = req.body;
+
+  if (!teamName || score === undefined) {
+    return res.status(400).json({ message: 'Team Name and Score are required' });
+  }
+
+  try {
+    const newScore = new Score({ teamName, score });
+    await newScore.save();
+    res.status(201).json({ message: 'Score submitted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Leaderboard Route: GET /api/leaderboard
+router.get('/leaderboard', async (req, res) => {
+  try {
+    const leaderboard = await Score.find({}).sort({ score: -1 }); // Sort by score in descending order
+    res.json(leaderboard); // Send the leaderboard as JSON
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch leaderboard data' });
+  }
+});
 
 // Signup API
 router.post('/signup', async (req, res) => {
@@ -56,10 +85,9 @@ router.post('/login', async (req, res) => {
 
     // Success
     res.status(200).json({ 
-        message: 'Login successful', 
-        teamName: user.teamName
-       
-      });
+      message: 'Login successful', 
+      teamName: user.teamName
+    });
 
   } catch (error) {
     console.error(error);

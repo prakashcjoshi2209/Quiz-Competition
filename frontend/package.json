@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.2",
-    "@monaco-editor/react": "^4.7.0",
-    "ace-builds": "^1.40.1",
+    "axios": "^1.9.0",
     "react": "^19.0.0",
     "react-ace": "^14.0.1",
     "react-dom": "^19.0.0",
