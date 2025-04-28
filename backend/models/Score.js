@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const scoreSchema = new mongoose.Schema({
+
+    email: { type: String, required: true, unique: true },
+
+
   teamName: {
     type: String,
     required: true,
@@ -9,6 +13,8 @@ const scoreSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+
+
   submittedAt: {
     type: Date,
     default: Date.now,

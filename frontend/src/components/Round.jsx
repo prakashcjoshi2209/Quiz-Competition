@@ -192,21 +192,29 @@ const Round = () => {
   const [selectedOptions, setSelectedOptions] = useState({});
   const [timer, setTimer] = useState(30 * 60);
   const [score, setScore] = useState(0);
+  const [email, setEmail] = useState("");
+
   const [showModal, setShowModal] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [teamName, setTeamName] = useState("");
 
   useEffect(() => {
     const storedTeamName = localStorage.getItem("teamName");
-    if (storedTeamName) {
-      setTeamName(storedTeamName);
-    } else {
-      const name = prompt("Enter your Team Name:");
-      if (name) {
-        localStorage.setItem("teamName", name);
-        setTeamName(name);
-      }
+    const storedEmail = localStorage.getItem("email");
+
+    if (storedTeamName && storedEmail) {
+    setTeamName(storedTeamName);
+    setEmail(storedEmail);
+  } else {
+    const name = prompt("Enter your Team Name:");
+    const mail = prompt("Enter your Email:");
+    if (name && mail) {
+      localStorage.setItem("teamName", name);
+      localStorage.setItem("email", mail);
+      setTeamName(name);
+      setEmail(mail);
     }
+  }
     setQuestions(shuffleArray([...questionsData]));
   }, []);
 
@@ -245,9 +253,11 @@ const Round = () => {
     try {
       await axios.post("http://localhost:5000/api/auth/submit", {
         teamName,
+        email,
         score: finalScore,
       });
-      toast.success("Submit Successfully and Saved to Database!");
+      toast.success("Submit Successfully!");
+      localStorage.setItem("round1Submitted", "true");
     } catch (error) {
       console.error("Error submitting:", error);
       toast.error("Failed to submit!");
@@ -255,7 +265,7 @@ const Round = () => {
 
     setTimeout(() => {
       window.location.href = "/dashboard";
-    }, 5500);
+    }, 6500);
   };
 
   const handleNextQuestion = () => {
@@ -280,6 +290,8 @@ const Round = () => {
       setShowModal(false);
     }
   };
+
+  
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -389,6 +401,8 @@ const Round = () => {
             Submit
           </button>
         )}
+
+{/* <p className="mt-4 text-xl text-purple-600">Your Score: {score}</p> */}
       </div>
 
       {/* Modal */}

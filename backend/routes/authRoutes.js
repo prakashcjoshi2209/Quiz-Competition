@@ -1,3 +1,4 @@
+
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import Score from '../models/Score.js';
@@ -5,18 +6,27 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
-// Score Route: POST /api/submit-score
+// Score Submit Route: POST /api/submit
 router.post('/submit', async (req, res) => {
-  const { teamName, score } = req.body;
+  const { teamName, score, email } = req.body;
 
-  if (!teamName || score === undefined) {
-    return res.status(400).json({ message: 'Team Name and Score are required' });
+  if (!teamName || score === undefined || !email) {
+    return res.status(400).json({ message: 'Team Name, Score, and Email are required' });
   }
 
   try {
-    const newScore = new Score({ teamName, score });
+    // Pehle check karo ki yeh email se already score submit hua hai ya nahi
+    const existingSubmission = await Score.findOne({ email });
+
+    if (existingSubmission) {
+      return res.status(400).json({ message: 'Already submitted for Round 1' });
+    }
+
+    // Agar nahi hua hai toh naya score save karo
+    const newScore = new Score({ teamName, score, email });
     await newScore.save();
     res.status(201).json({ message: 'Score submitted successfully' });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -26,8 +36,8 @@ router.post('/submit', async (req, res) => {
 // Leaderboard Route: GET /api/leaderboard
 router.get('/leaderboard', async (req, res) => {
   try {
-    const leaderboard = await Score.find({}).sort({ score: -1 }); // Sort by score in descending order
-    res.json(leaderboard); // Send the leaderboard as JSON
+    const leaderboard = await Score.find({}).sort({ score: -1 }); // High to Low
+    res.json(leaderboard);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch leaderboard data' });
   }
@@ -44,7 +54,7 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ message: 'User already exists with this email' });
     }
 
-    // Hash Password
+    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -86,8 +96,27 @@ router.post('/login', async (req, res) => {
     // Success
     res.status(200).json({ 
       message: 'Login successful', 
-      teamName: user.teamName
+      teamName: user.teamName,
+      email: user.email
     });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// API to Check Submission Status based on Email
+router.get('/check-submission/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    const existingSubmission = await Score.findOne({ email });
+
+    if (existingSubmission) {
+      return res.status(200).json({ submitted: true });
+    } else {
+      return res.status(200).json({ submitted: false });
+    }
 
   } catch (error) {
     console.error(error);

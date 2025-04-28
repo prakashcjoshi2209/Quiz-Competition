@@ -9,6 +9,7 @@ import Round from './components/Round';
 import Leaderboard from './components/LeaderBoard';
 
 
+
 function App() {
   return (
     <Router>
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/round1" element={<Round/>} />
+        {/* <Route path="round2" element={<CodingPlatform />} /> */}
         <Route path="/leader" element={<Leaderboard/>} />
       </Routes>
       <ToastContainer />

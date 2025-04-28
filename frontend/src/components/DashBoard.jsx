@@ -1,37 +1,74 @@
 import React, { useState, useEffect } from "react";
-import { FaUserCircle, FaTimes } from "react-icons/fa";
+import { FaUserCircle, FaTimes, FaSignOutAlt } from "react-icons/fa"; // Added FaSignOutAlt for the logout button
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify"; // Importing toastify
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const teamName = localStorage.getItem("teamName") || "User";
-
+  const [teamsRound1, setTeamsRound1] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [isAgreed, setIsAgreed] = useState(false);
   const [round1Submitted, setRound1Submitted] = useState(false);
   const [password, setPassword] = useState("");
+  const [isEligibleForRound2, setIsEligibleForRound2] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false); // State for logout modal
 
   useEffect(() => {
     const submitted = localStorage.getItem("round1Submitted");
     if (submitted === "true") {
       setRound1Submitted(true);
     }
-  }, []);
+
+    // Fetch leaderboard to check eligibility for Round 2
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/auth/leaderboard"
+        );
+        const leaderboardData = response.data;
+        leaderboardData.sort((a, b) => b.score - a.score);
+
+        // Check if the team is in the top 10
+        const top10Teams = leaderboardData.slice(0, 10);
+        if (top10Teams.some((team) => team.teamName === teamName)) {
+          setIsEligibleForRound2(true);
+        } else {
+          setIsEligibleForRound2(false);
+        }
+      } catch (err) {
+        console.error("Failed to fetch leaderboard data:", err);
+      }
+    };
+
+    fetchLeaderboard();
+  }, [teamName]);
 
   const openModal = (content) => {
-    // Same validations
+    const email = localStorage.getItem("email");
+
     if (content.includes("Round 1") && round1Submitted) {
-      alert("You have already submitted Round 1.");
+      if (email) {
+        alert("You have already submitted Round 1.");
+      } else {
+        alert("Email not found!");
+      }
       return;
     }
-    if (content.includes("Round 2")) {
-      alert(
-        "This round is only for those students who are selected for Round 2."
-      );
+
+    if (content.includes("Round 2") && !isEligibleForRound2) {
+      alert("You are not eligible for Round 2.");
       return;
     }
-    if (content.includes("Round 3")) {
+
+    if (content.includes("Round 2") && isEligibleForRound2) {
+      setModalContent(content);
+      setIsModalOpen(true);
+      setIsAgreed(false);
+      setPassword(""); // Reset password input for Round 2
+    } else if (content.includes("Round 3")) {
       alert(
         "This round is only for those students who are selected for Round 3."
       );
@@ -41,7 +78,7 @@ const Dashboard = () => {
     setModalContent(content);
     setIsModalOpen(true);
     setIsAgreed(false);
-    setPassword(""); // Reset password input
+    setPassword(""); // Reset password input for other rounds
   };
 
   const closeModal = () => {
@@ -52,19 +89,44 @@ const Dashboard = () => {
 
   const handleOk = () => {
     if (modalContent.includes("Round 1")) {
-      localStorage.setItem("round1Submitted", "true");
-      setRound1Submitted(true);
       navigate("/round1");
     } else if (modalContent.includes("Leaderboard")) {
-      // Check password
+      // Check password for Leaderboard
       if (password === "30102209") {
         navigate("/leader");
       } else {
         alert("Incorrect Password!");
         return;
       }
+    } else if (modalContent.includes("Round 2")) {
+      // Check eligibility for Round 2
+      if (isEligibleForRound2 && password === "30220910") {
+        navigate("/round2"); // Navigate to Round 2 if eligible and password matches
+      } else {
+        alert("You are not eligible for Round 2!");
+        return;
+      }
     }
     closeModal();
+  };
+
+  const handleLogout = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleLogoutConfirm = () => {
+    // localStorage.clear(); // Clear all localStorage data
+    toast.success("Logout Successful!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+    });
+    navigate("/login"); // Redirect to login page
+    setIsLogoutModalOpen(false);
+  };
+
+  const handleLogoutCancel = () => {
+    setIsLogoutModalOpen(false); // Close logout confirmation modal
   };
 
   return (
@@ -108,13 +170,14 @@ const Dashboard = () => {
             In this round, the top 5 teams will be selected who will then move
             on to the final round.
           </p>
+          {/* Always visible Start button for Round 2 */}
           <button
             onClick={() =>
               openModal(
                 "Instructions for Round 2:\n- Solve problem statements.\n- Top 5 teams will be selected.\n- Time limit: 45 minutes."
               )
             }
-            className="bg-gradient-to-r from-pink-500 to-yellow-400 text-white py-2 px-6 rounded-full font-semibold hover:scale-105 transition-transform duration-300"
+            className={`bg-gradient-to-r from-pink-500 to-yellow-400 text-white py-2 px-6 rounded-full font-semibold hover:scale-105 transition-transform duration-300`}
           >
             Start
           </button>
@@ -157,20 +220,60 @@ const Dashboard = () => {
             See Progress
           </button>
         </div>
+
+      
       </div>
 
-      {/* Modal */}
+      {/* Logout Button */}
+      <button
+        onClick={handleLogout}
+        className="fixed bottom-5 right-5 bg-red-600 text-white p-3 rounded-full shadow-lg hover:bg-red-700"
+      >
+        <FaSignOutAlt size={24} />
+      </button>
+
+      {/* Logout Confirmation Modal */}
+      {isLogoutModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-3xl p-8 w-11/12 max-w-md relative">
+            <button
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+              onClick={handleLogoutCancel}
+            >
+              <FaTimes size={24} />
+            </button>
+            <h2 className="text-2xl font-bold text-red-600 mb-4">
+              Are you sure you want to logout?
+            </h2>
+            <div className="flex justify-around">
+              <button
+                onClick={handleLogoutConfirm}
+                className="bg-red-600 text-white py-2 px-6 rounded-full hover:bg-red-700"
+              >
+                Yes
+              </button>
+              <button
+                onClick={handleLogoutCancel}
+                className="bg-gray-400 text-white py-2 px-6 rounded-full hover:bg-gray-500"
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+     
+      {/* Modal for rounds */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-3xl p-8 w-11/12 max-w-md relative">
-            {/* Close Button */}
             <button
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
               onClick={closeModal}
             >
               <FaTimes size={24} />
             </button>
-
             <h2 className="text-2xl font-bold text-purple-700 mb-4">
               Instructions
             </h2>
@@ -183,6 +286,19 @@ const Dashboard = () => {
                 <input
                   type="password"
                   placeholder="Enter Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full p-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+            )}
+
+            {/* Password Input for Round 2 */}
+            {modalContent.includes("Round 2") && (
+              <div className="mb-4">
+                <input
+                  type="password"
+                  placeholder="Enter Round 2 Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full p-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
