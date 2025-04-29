@@ -34,7 +34,7 @@ const Leaderboard = () => {
         setTeamsRound1(leaderboardData);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch leaderboard data.');
+        setError('Failed to fetch leaderboard data.',err); // Handle error
         setLoading(false);
       }
     };

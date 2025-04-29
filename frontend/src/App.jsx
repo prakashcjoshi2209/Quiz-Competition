@@ -7,7 +7,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './components/DashBoard';
 import Round from './components/Round';
 import Leaderboard from './components/LeaderBoard';
-
+import CodeEditor from './components/CodeEditor';
+import LeetCodeQuestion from './components/LeetCodeQuestion';
+import CodingPlatform from './components/CodingPlatform';
 
 
 function App() {
