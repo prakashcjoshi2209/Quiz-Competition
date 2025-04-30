@@ -353,7 +353,7 @@ const Round = () => {
           {questions[currentQuestionIndex].options.map((option, index) => {
             const isSelected =
               selectedOptions[questions[currentQuestionIndex].id] === option;
-            const isAnswered = selectedOptions[questions[currentQuestionIndex].id];
+              const isAnswered = selectedOptions[questions[currentQuestionIndex].id];
             return (
               <label
                 key={index}

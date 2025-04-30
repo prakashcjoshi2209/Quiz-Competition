@@ -6,10 +6,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './components/DashBoard';
 import Round from './components/Round';
-import Leaderboard from './components/LeaderBoard';
-import CodeEditor from './components/CodeEditor';
-import LeetCodeQuestion from './components/LeetCodeQuestion';
-import CodingPlatform from './components/CodingPlatform';
+import Leaderboard from './components/Leaderboard';
+// import CodeEditor from './components/CodeEditor';
+import Round2 from './components/Round2';
 
 
 function App() {
@@ -21,8 +20,9 @@ function App() {
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/round1" element={<Round/>} />
-        {/* <Route path="round2" element={<CodingPlatform />} /> */}
+        <Route path="/round2" element={<Round2/>} />
         <Route path="/leader" element={<Leaderboard/>} />
+        {/* <Route path="/code-editor" element={<CodeEditor/>} /> */}
       </Routes>
       <ToastContainer />
     </Router>
