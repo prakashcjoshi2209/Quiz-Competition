@@ -3,184 +3,183 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios"; // ✅ Axios import kar lo request ke liye
 
-
 const questionsData = [
-    {
-      id: "q1", // Unique ID for the question
-      questionImage: "/img1.png", // Question Image URL
-      options: ["2,7", "7,2", "5,2", "2,5"],
-      correctAnswer: "7,2",
-    },
-    {
-      id: "q2", // Unique ID for the question
-      questionImage: "img2.png", // Question Image URL
-      options: ["12,4", "4,12", "4", "2"],
-      correctAnswer: "12,4",
-    },
-    {
-      id: "q3", // Unique ID for the question
-      questionImage: "img3.png", // Question Image URL
-      options: ["Logical Error", "300", "200", "Compilation Error"],
-      correctAnswer: "200",
-    },
-    {
-      id: "q4", // Unique ID for the question
-      questionImage: "img4.png", // Question Image URL
-      options: ["No Output", "10,20", "1", "Error"],
-      correctAnswer: "10,20",
-    },
-    {
-      id: "q5", // Unique ID for the question
-      questionImage: "img5.png", // Question Image URL
-      options: ["C is WOW", "C is Headache", "0", "Error"],
-      correctAnswer: "C is WOW",
-    },
-    {
-      id: "q6", // Unique ID for the question
-      questionImage: "img6.png", // Question Image URL
-      options: ["Error", "0 15 15", "15 15 15", "15 15 0"],
-      correctAnswer: "15 15 0",
-    },
-    {
-      id: "q7", // Unique ID for the question
-      questionImage: "img7.png", // Question Image URL
-      options: [
-        "Counting 1 to 10",
-        "Counting 0 to 9",
-        "Counting 1 to 9",
-        "Error",
-      ],
-      correctAnswer: "Counting 1 to 10",
-    },
-    {
-      id: "q8", // Unique ID for the question
-      questionImage: "img8.png", // Question Image URL
-      options: ["11", "12", "10", "Error"],
-      correctAnswer: "10",
-    },
-    {
-      id: "q9", // Unique ID for the question
-      questionImage: "img9.png", // Question Image URL
-      options: ["20", "18", "21", "Error"],
-      correctAnswer: "21",
-    },
-    {
-      id: "q10", // Unique ID for the question
-      questionImage: "img10.png", // Question Image URL
-      options: ["Size in Bits", "Size in Bytes", "4 Bytes", "2 Bytes"],
-      correctAnswer: "Size in Bytes",
-    },
-    {
-      id: "q11", // Unique ID for the question
-      questionImage: "img11.png", // Question Image URL
-      options: [
-        "Counting 1 to 10",
-        "Undefined",
-        "Compilation Error",
-        "Infinit Loop",
-      ],
-      correctAnswer: "Counting 1 to 10",
-    },
-    {
-      id: "q12", // Unique ID for the question
-      questionImage: "img12.png", // Question Image URL
-      options: ["HelloHi", "Error", "Undefined", "Scope Out of Bound"],
-      correctAnswer: "HelloHi",
-    },
-    {
-      id: "q13", // Unique ID for the question
-      questionImage: "img13.png", // Question Image URL
-      options: ["24", "24.2", "Syntax Error", "Logical Error"],
-      correctAnswer: "24",
-    },
-    {
-      id: "q14", // Unique ID for the question
-      questionImage: "img14.png", // Question Image URL
-      options: ["Error", "24", "24.2", "0"],
-      correctAnswer: "Error",
-    },
-    {
-      id: "q15", // Unique ID for the question
-      questionImage: "img15.png", // Question Image URL
-      options: ["Error", "1,2,3", "1", "123"],
-      correctAnswer: "Error",
-    },
-    {
-      id: "q16", // Unique ID for the question
-      questionImage: "img16.png", // Question Image URL
-      options: ["1,2,3", "3", "Undefined", "Error"],
-      correctAnswer: "3",
-    },
-    {
-      id: "q17", // Unique ID for the question
-      questionImage: "img17.png", // Question Image URL
-      options: ["TRUE", "Error", "FALSE", "0"],
-      correctAnswer: "FALSE",
-    },
-    {
-      id: "q18", // Unique ID for the question
-      questionImage: "img18.png", // Question Image URL
-      options: ["3 2", "3 4", "4 3", "3 3"],
-      correctAnswer: "3 3",
-    },
-    {
-      id: "q19", // Unique ID for the question
-      questionImage: "img19.png", // Question Image URL
-      options: [
-        "0 Extra Variable",
-        "1 Extra Variable",
-        "2 Extra Variable",
-        "3 Extra Variable",
-      ],
-      correctAnswer: "0 Extra Variable",
-    },
-    {
-      id: "q20", // Unique ID for the question
-      questionImage: "img20.png", // Question Image URL
-      options: [
-        "Some Random Value",
-        "Compilation Error",
-        "Address to the main function",
-        "Cannot call main more than once",
-      ],
-      correctAnswer: "Address to the main function",
-    },
-    {
-      id: "q21", // Unique ID for the question
-      questionImage: "img21.png", // Question Image URL
-      options: ["Undefined", "20", "10", "14"],
-      correctAnswer: "14",
-    },
-    {
-      id: "q22", // Unique ID for the question
-      questionImage: "img22.png", // Question Image URL
-      options: ["2 Bytes", "4 Bytes", "1 Bytes", "Depending on the system"],
-      correctAnswer: "Depending on the system",
-    },
-    {
-      id: "q23", // Unique ID for the question
-      questionImage: "img23.png", // Question Image URL
-      options: [
-        "Error",
-        "Some ASCII values",
-        "Character given by user",
-        "Syntax Error",
-      ],
-      correctAnswer: "Character given by user",
-    },
-    {
-      id: "q24", // Unique ID for the question
-      questionImage: "img24.png", // Question Image URL
-      options: ["16 21", "21 16", "5", "16"],
-      correctAnswer: "16 21",
-    },
-    {
-      id: "q25", // Unique ID for the question
-      questionImage: "img25.png", // Question Image URL
-      options: ["110", "60", "0", "50"],
-      correctAnswer: "0",
-    },
-  ];
+  {
+    id: "q1", // Unique ID for the question
+    questionImage: "/img1.png", // Question Image URL
+    options: ["2,7", "7,2", "5,2", "2,5"],
+    correctAnswer: "7,2",
+  },
+  {
+    id: "q2", // Unique ID for the question
+    questionImage: "img2.png", // Question Image URL
+    options: ["12,4", "4,12", "4", "2"],
+    correctAnswer: "12,4",
+  },
+  {
+    id: "q3", // Unique ID for the question
+    questionImage: "img3.png", // Question Image URL
+    options: ["Logical Error", "300", "200", "Compilation Error"],
+    correctAnswer: "200",
+  },
+  {
+    id: "q4", // Unique ID for the question
+    questionImage: "img4.png", // Question Image URL
+    options: ["No Output", "10,20", "1", "Error"],
+    correctAnswer: "10,20",
+  },
+  {
+    id: "q5", // Unique ID for the question
+    questionImage: "img5.png", // Question Image URL
+    options: ["C is WOW", "C is Headache", "0", "Error"],
+    correctAnswer: "C is WOW",
+  },
+  {
+    id: "q6", // Unique ID for the question
+    questionImage: "img6.png", // Question Image URL
+    options: ["Error", "0 15 15", "15 15 15", "15 15 0"],
+    correctAnswer: "15 15 0",
+  },
+  {
+    id: "q7", // Unique ID for the question
+    questionImage: "img7.png", // Question Image URL
+    options: [
+      "Counting 1 to 10",
+      "Counting 0 to 9",
+      "Counting 1 to 9",
+      "Error",
+    ],
+    correctAnswer: "Counting 1 to 10",
+  },
+  {
+    id: "q8", // Unique ID for the question
+    questionImage: "img8.png", // Question Image URL
+    options: ["11", "12", "10", "Error"],
+    correctAnswer: "10",
+  },
+  {
+    id: "q9", // Unique ID for the question
+    questionImage: "img9.png", // Question Image URL
+    options: ["20", "18", "21", "Error"],
+    correctAnswer: "21",
+  },
+  {
+    id: "q10", // Unique ID for the question
+    questionImage: "img10.png", // Question Image URL
+    options: ["Size in Bits", "Size in Bytes", "4 Bytes", "2 Bytes"],
+    correctAnswer: "Size in Bytes",
+  },
+  {
+    id: "q11", // Unique ID for the question
+    questionImage: "img11.png", // Question Image URL
+    options: [
+      "Counting 1 to 10",
+      "Undefined",
+      "Compilation Error",
+      "Infinit Loop",
+    ],
+    correctAnswer: "Counting 1 to 10",
+  },
+  {
+    id: "q12", // Unique ID for the question
+    questionImage: "img12.png", // Question Image URL
+    options: ["HelloHi", "Error", "Undefined", "Scope Out of Bound"],
+    correctAnswer: "HelloHi",
+  },
+  {
+    id: "q13", // Unique ID for the question
+    questionImage: "img13.png", // Question Image URL
+    options: ["24", "24.2", "Syntax Error", "Logical Error"],
+    correctAnswer: "24",
+  },
+  {
+    id: "q14", // Unique ID for the question
+    questionImage: "img14.png", // Question Image URL
+    options: ["Error", "24", "24.2", "0"],
+    correctAnswer: "Error",
+  },
+  {
+    id: "q15", // Unique ID for the question
+    questionImage: "img15.png", // Question Image URL
+    options: ["Error", "1,2,3", "1", "123"],
+    correctAnswer: "Error",
+  },
+  {
+    id: "q16", // Unique ID for the question
+    questionImage: "img16.png", // Question Image URL
+    options: ["1,2,3", "3", "Undefined", "Error"],
+    correctAnswer: "3",
+  },
+  {
+    id: "q17", // Unique ID for the question
+    questionImage: "img17.png", // Question Image URL
+    options: ["TRUE", "Error", "FALSE", "0"],
+    correctAnswer: "FALSE",
+  },
+  {
+    id: "q18", // Unique ID for the question
+    questionImage: "img18.png", // Question Image URL
+    options: ["3 2", "3 4", "4 3", "3 3"],
+    correctAnswer: "3 3",
+  },
+  {
+    id: "q19", // Unique ID for the question
+    questionImage: "img19.png", // Question Image URL
+    options: [
+      "0 Extra Variable",
+      "1 Extra Variable",
+      "2 Extra Variable",
+      "3 Extra Variable",
+    ],
+    correctAnswer: "0 Extra Variable",
+  },
+  {
+    id: "q20", // Unique ID for the question
+    questionImage: "img20.png", // Question Image URL
+    options: [
+      "Some Random Value",
+      "Compilation Error",
+      "Address to the main function",
+      "Cannot call main more than once",
+    ],
+    correctAnswer: "Address to the main function",
+  },
+  {
+    id: "q21", // Unique ID for the question
+    questionImage: "img21.png", // Question Image URL
+    options: ["Undefined", "20", "10", "14"],
+    correctAnswer: "14",
+  },
+  {
+    id: "q22", // Unique ID for the question
+    questionImage: "img22.png", // Question Image URL
+    options: ["2 Bytes", "4 Bytes", "1 Bytes", "Depending on the system"],
+    correctAnswer: "Depending on the system",
+  },
+  {
+    id: "q23", // Unique ID for the question
+    questionImage: "img23.png", // Question Image URL
+    options: [
+      "Error",
+      "Some ASCII values",
+      "Character given by user",
+      "Syntax Error",
+    ],
+    correctAnswer: "Character given by user",
+  },
+  {
+    id: "q24", // Unique ID for the question
+    questionImage: "img24.png", // Question Image URL
+    options: ["16 21", "21 16", "5", "16"],
+    correctAnswer: "16 21",
+  },
+  {
+    id: "q25", // Unique ID for the question
+    questionImage: "img25.png", // Question Image URL
+    options: ["110", "60", "0", "50"],
+    correctAnswer: "0",
+  },
+];
 
 function shuffleArray(array) {
   return array.sort(() => Math.random() - 0.5);
@@ -203,18 +202,18 @@ const Round = () => {
     const storedEmail = localStorage.getItem("email");
 
     if (storedTeamName && storedEmail) {
-    setTeamName(storedTeamName);
-    setEmail(storedEmail);
-  } else {
-    const name = prompt("Enter your Team Name:");
-    const mail = prompt("Enter your Email:");
-    if (name && mail) {
-      localStorage.setItem("teamName", name);
-      localStorage.setItem("email", mail);
-      setTeamName(name);
-      setEmail(mail);
+      setTeamName(storedTeamName);
+      setEmail(storedEmail);
+    } else {
+      const name = prompt("Enter your Team Name:");
+      const mail = prompt("Enter your Email:");
+      if (name && mail) {
+        localStorage.setItem("teamName", name);
+        localStorage.setItem("email", mail);
+        setTeamName(name);
+        setEmail(mail);
+      }
     }
-  }
     setQuestions(shuffleArray([...questionsData]));
   }, []);
 
@@ -257,7 +256,10 @@ const Round = () => {
         score: finalScore,
       });
       toast.success("Submit Successfully!");
+
+     // localstorage me true
       localStorage.setItem("round1Submitted", "true");
+
     } catch (error) {
       console.error("Error submitting:", error);
       toast.error("Failed to submit!");
@@ -265,7 +267,7 @@ const Round = () => {
 
     setTimeout(() => {
       window.location.href = "/dashboard";
-    }, 6500);
+    }, 1500);
   };
 
   const handleNextQuestion = () => {
@@ -291,8 +293,6 @@ const Round = () => {
     }
   };
 
-  
-
   const handleModalClose = () => {
     setShowModal(false);
   };
@@ -313,25 +313,30 @@ const Round = () => {
   if (questions.length === 0) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 p-6 relative">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 p-4 sm:p-6 relative">
       {/* Timer */}
-      <div className="absolute top-4 right-6 bg-white shadow-lg rounded-full px-6 py-2 font-bold text-purple-700">
+
+      <div className="absolute top-4 right-4 sm:right-6 bg-white shadow-lg rounded-full px-4 sm:px-6 py-2 text-sm sm:text-base font-bold text-purple-700">
         {Math.floor(timer / 60)}:
         {timer % 60 < 10 ? `0${timer % 60}` : timer % 60}
       </div>
 
       {/* Heading */}
-      <h1 className="text-4xl font-bold text-center text-purple-700 mb-10">
+
+      <h1 className="text-2xl sm:text-4xl font-bold text-center text-purple-700 mb-6 sm:mb-10">
         C Programming Quiz Competition
       </h1>
 
       {/* Question Blocks at the top */}
-      <div className="flex justify-center space-x-4 mb-6">
+
+      <div className="grid grid-cols-5 sm:grid-cols-10 gap-2 sm:gap-4 justify-center mb-6">
         {questions.map((_, index) => (
           <button
             key={index}
             onClick={() => handleQuestionClick(index)}
-            className={`px-4 py-2 rounded-full ${getQuestionBlockClass(index)}`}
+            className={`text-sm px-3 py-2 rounded-full ${getQuestionBlockClass(
+              index
+            )}`}
           >
             {index + 1}
           </button>
@@ -339,25 +344,34 @@ const Round = () => {
       </div>
 
       {/* Main Card */}
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-xl">
-        <h2 className="text-2xl font-semibold mb-6">
+
+      <div className="max-w-3xl mx-auto bg-white p-4 sm:p-8 rounded-2xl shadow-xl">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">
           Question {currentQuestionIndex + 1}
         </h2>
-        <img
-          src={questions[currentQuestionIndex].questionImage}
-          alt="Question"
-          className="mb-6 w-full h-auto object-cover rounded-lg"
-        />
 
-        <div className="flex flex-col space-y-4 mb-8">
+        {/* Question Image */}
+        <div className="w-full max-h-[300px] sm:max-h-[400px] overflow-hidden rounded-lg mb-4 sm:mb-6">
+          <img
+            src={questions[currentQuestionIndex].questionImage}
+            alt="Question"
+            className="w-full h-full object-contain"
+          />
+        </div>
+
+        {/* Options */}
+        <div className="flex flex-col gap-3 mb-6 sm:mb-8">
           {questions[currentQuestionIndex].options.map((option, index) => {
             const isSelected =
               selectedOptions[questions[currentQuestionIndex].id] === option;
-              const isAnswered = selectedOptions[questions[currentQuestionIndex].id];
             return (
               <label
                 key={index}
-                className={`flex items-center space-x-2 ${isSelected ? "text-green-500" : ""}`}
+                className={`flex items-center gap-3 text-sm sm:text-base p-2 rounded-lg border ${
+                  isSelected
+                    ? "bg-green-100 border-green-500 text-green-700"
+                    : "bg-gray-100"
+                }`}
               >
                 <input
                   type="radio"
@@ -374,78 +388,77 @@ const Round = () => {
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-between mt-4">
+
+        <div className="flex justify-between gap-4 mt-4">
           <button
             onClick={handlePrevQuestion}
             disabled={currentQuestionIndex === 0}
-            className="w-1/4 bg-purple-500 text-white py-3 rounded-full font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-1/2 sm:w-1/4 bg-purple-500 text-white py-2 rounded-full font-bold disabled:opacity-50"
           >
             Prev
           </button>
           <button
             onClick={handleNextQuestion}
             disabled={currentQuestionIndex === questions.length - 1}
-            className="w-1/4 bg-purple-500 text-white py-3 rounded-full font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-1/2 sm:w-1/4 bg-purple-500 text-white py-2 rounded-full font-bold disabled:opacity-50"
           >
             Next
           </button>
         </div>
 
         {/* Submit Button */}
+
+        {/* Submit Button */}
         {currentQuestionIndex === questions.length - 1 && (
           <button
             onClick={() => setShowModal(true)}
             disabled={!selectedOptions[questions[currentQuestionIndex].id]}
-            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-full font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-all mt-4"
+            className="w-full mt-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-full font-bold disabled:opacity-50"
           >
             Submit
           </button>
         )}
 
-{/* <p className="mt-4 text-xl text-purple-600">Your Score: {score}</p> */}
-      </div>
+        {/* Modal */}
 
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-            <h3 className="text-xl font-semibold">
-              Are you sure you want to submit?
-            </h3>
-            <div className="mt-4">
-              <label className="flex items-center">
+        {showModal && (
+          <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50 px-4">
+            <div className="bg-white p-6 rounded-lg w-full max-w-xs sm:max-w-md shadow-lg">
+              <h3 className="text-lg sm:text-xl font-semibold mb-4">
+                Are you sure you want to submit?
+              </h3>
+              <label className="flex items-center gap-2 mb-4">
                 <input
                   type="checkbox"
                   checked={isChecked}
                   onChange={handleCheckboxChange}
-                  className="mr-2"
+                  className="form-checkbox text-purple-600"
                 />
-                I confirm to submit.
+                <span className="text-sm">I confirm to submit.</span>
               </label>
-            </div>
-            <div className="mt-4 flex justify-between">
-              <button
-                onClick={handleModalClose}
-                className="bg-gray-300 text-black px-4 py-2 rounded-md"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleModalSubmit}
-                disabled={!isChecked}
-                className="bg-blue-500 text-white px-4 py-2 rounded-md disabled:opacity-50"
-              >
-                OK
-              </button>
+              <div className="flex justify-between">
+                <button
+                  onClick={handleModalClose}
+                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleModalSubmit}
+                  disabled={!isChecked}
+                  className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
+                >
+                  Confirm
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <ToastContainer />
+        <ToastContainer />
+      </div>
     </div>
   );
 };
 
 export default Round;
-
