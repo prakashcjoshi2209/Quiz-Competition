@@ -1,172 +1,94 @@
 import React, { useState } from "react";
-import axios from "axios";
-import Editor from "react-simple-code-editor";
-import Prism from "prismjs";
-import "prismjs/components/prism-c";
-import "prismjs/themes/prism-tomorrow.css";
 
 const Round2 = () => {
-  const [code, setCode] = useState(`#include<stdio.h>
+  const [showConfirm, setShowConfirm] = useState(false);
 
-int main() {
-    char name[20];
-    printf("Enter your name: ");
-    scanf("%s", name);
-    printf("Hello %s", name);
-    return 0;
-}`);
-  const [terminal, setTerminal] = useState("💻 Click Run to provide input...\n");
-  const [input, setInput] = useState("");
-  const [inputVisible, setInputVisible] = useState(false);
-  const [hasRunOnce, setHasRunOnce] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleRun = async () => {
-    if (!inputVisible) {
-      setTerminal("💻 Please enter your input below 👇 and click Run again to execute the code.\n");
-      setInputVisible(true);
-      return;
-    }
-
-    if (!input.trim()) {
-      setTerminal((prev) => prev + "❗ Input is required before running the code.\n");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setTerminal((prev) => prev + `> ${input}\nRunning...\n`);
-
-    try {
-      const response = await axios.post(
-        "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=true",
-        {
-          source_code: code,
-          language_id: 50,
-          stdin: input,
-        },
-        {
-          headers: {
-            "content-type": "application/json",
-            "X-RapidAPI-Key": "",
-            "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
-          },
-        }
-      );
-
-      let output = "No output";
-      if (response.data.stdout) {
-        output = response.data.stdout;
-      } else if (response.data.stderr) {
-        output = `Error: ${response.data.stderr}`;
-      } else if (response.data.compile_output) {
-        output = `Compile Error: ${response.data.compile_output}`;
-      }
-
-      setTerminal((prev) => prev + output + "\n");
-      setHasRunOnce(true);
-    } catch (err) {
-      console.error(err);
-      setTerminal((prev) => prev + "❌ Error running code.\n");
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleStartClick = () => {
+    setShowConfirm(true);
   };
 
-  const handleReset = () => {
-    setCode("");
-    setInput("");
-    setTerminal("💻 Terminal reset. Click Run to provide input...\n");
-    setSubmitted(false);
-    setInputVisible(false);
-    setHasRunOnce(false);
-  };
-
-  const handleSubmit = () => {
-    setSubmitted(true);
-    setTerminal((prev) => prev + "✅ Code submitted successfully!\n");
+  const handleConfirm = () => {
+    window.open("https://www.hackerrank.com/round-2-coding-competition", "_blank");
+    setShowConfirm(false);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 p-4 flex items-center justify-center">
-      <div className="max-w-5xl w-full mx-auto bg-gray-900 text-white rounded-xl shadow-lg p-4">
-        <h1 className="text-2xl font-semibold mb-4 text-center">Round 2 - C Code Editor</h1>
+    <div className="min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 flex items-center justify-center p-4">
+      <div className="max-w-3xl w-full mx-auto bg-gray-900 text-white rounded-xl shadow-lg p-8 relative">
+        <h1 className="text-3xl font-semibold text-center mb-6">
+          Round 2 Coding Test Overview
+        </h1>
+        <p className="text-xl text-center mb-4">
+        "Choose any 3 out of 5 carefully selected questions to enhance your coding skills!"
+        </p>
 
-        <div className="flex flex-col md:flex-row gap-3 mb-4">
-          <div className="w-full md:w-1/2 h-48 border border-gray-700 rounded-lg p-3 bg-gray-800 text-white overflow-auto">
-            <h2 className="text-md font-semibold mb-1">Question Description</h2>
+        <div className="space-y-6">
+          <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+            <h2 className="text-2xl font-semibold mb-3">Test Instructions</h2>
             <p className="text-sm">
-              Write a C program that asks for your name and prints it with a greeting.
-              Use <code>scanf</code> for input and <code>printf</code> for output.
+              In this test series, you will find 5 coding questions with varying
+              difficulty levels. Each question is carefully selected to help you
+              improve your problem-solving skills.
+            </p>
+            <p className="text-sm">
+              Please read each question carefully, and try to write clean,
+              efficient code.
             </p>
           </div>
 
-          <div
-            className="w-full md:w-1/2 h-48 border border-gray-700 rounded-lg font-mono text-sm overflow-auto"
-            style={{ backgroundColor: "#2d2d2d" }}
-          >
-            <Editor
-              value={code}
-              onValueChange={(code) => setCode(code)}
-              highlight={(code) => Prism.highlight(code, Prism.languages.c, "c")}
-              padding={12}
-              style={{
-                backgroundColor: "#2d2d2d",
-                color: "#f8f8f2",
-                fontFamily: '"Fira Code", "Fira Mono", monospace',
-                fontSize: 13,
-                minHeight: "100%",
-              }}
-            />
+          {/* Questions */}
+          <div className="space-y-4">
+            {[
+              "Simple Array Sum",
+              "Staircase",
+              "Solve me first",
+              "Plus minus",
+              "Birthday Cake Candles",
+            ].map((title, index) => (
+              <div
+                key={index}
+                className="bg-gray-800 p-4 rounded-lg border border-gray-700"
+              >
+                <h3 className="text-xl font-semibold">
+                  Question {index + 1}: {title}
+                </h3>
+              </div>
+            ))}
           </div>
-        </div>
 
-        <div className="mt-4 flex gap-3 justify-center">
-          <button
-            onClick={handleRun}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all disabled:opacity-60"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Running..." : "Run"}
-          </button>
-
-          <button
-            onClick={handleReset}
-            className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-all"
-          >
-            Reset
-          </button>
-        </div>
-
-        {/* Terminal and Input */}
-        <div className="mt-4 bg-black text-green-400 p-3 rounded-lg border border-gray-700 shadow-inner font-mono">
-          <div className="whitespace-pre-wrap text-sm mb-2">{terminal}</div>
-
-          {inputVisible && (
-            <input
-              type="text"
-              className="w-full bg-gray-800 text-white border border-gray-600 rounded-lg px-3 py-2 text-sm"
-              placeholder="Type your input here (e.g., Vikash)"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
-          )}
-        </div>
-
-        {hasRunOnce && (
-          <div className="mt-4 text-center">
+          {/* Button */}
+          <div className="flex justify-center mt-6">
             <button
-              onClick={handleSubmit}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all"
+              onClick={handleStartClick}
+              className="laser-border focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              Submit
+              <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-gradient-to-r from-purple-700 to-indigo-700 px-6 py-3 text-white font-bold transition-transform duration-300 hover:scale-105">
+                Start the Test
+              </span>
             </button>
           </div>
-        )}
+        </div>
 
-        {submitted && (
-          <div className="mt-3 text-green-400 font-semibold text-center">
-            ✅ Your code has been submitted successfully!
+        {/* Confirmation Modal */}
+        {showConfirm && (
+          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+            <div className="bg-gray-800 border border-indigo-500 text-white p-6 rounded-lg shadow-lg w-full max-w-sm text-center">
+              <h2 className="text-xl font-semibold mb-4">Are you sure you want to start the test?</h2>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={handleConfirm}
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded-lg"
+                >
+                  ✅ OK
+                </button>
+                <button
+                  onClick={() => setShowConfirm(false)}
+                  className="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded-lg"
+                >
+                  ❌ Cancel
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

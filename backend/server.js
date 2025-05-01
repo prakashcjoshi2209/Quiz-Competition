@@ -14,6 +14,8 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 
+const compilerRoutes = require('./routes/compilerRoutes');
+app.use('/api/compiler', compilerRoutes);
 
 
 // Connect Database and Run Server
