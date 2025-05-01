@@ -9,7 +9,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/auth/leaderboard');
+        const response = await axios.get('https://quiz-competition-6au4.onrender.com/api/auth/leaderboard');
         const leaderboardData = response.data;
 
         leaderboardData.sort((a, b) => b.score - a.score);

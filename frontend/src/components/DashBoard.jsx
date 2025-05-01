@@ -38,7 +38,7 @@ const Dashboard = () => {
     const fetchLeaderboard = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/auth/leaderboard"
+          "https://quiz-competition-6au4.onrender.com/api/auth/leaderboard"
         );
         const leaderboardData = response.data.sort((a, b) => b.score - a.score);
         const top10 = leaderboardData.slice(0, 10);
