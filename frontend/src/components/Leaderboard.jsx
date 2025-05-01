@@ -1,27 +1,10 @@
-
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Leaderboard = () => {
   const [teamsRound1, setTeamsRound1] = useState([]);
-  const [teamsRound2, setTeamsRound2] = useState([
-    { teamName: "Alpha Warriors", score: 95 },
-    { teamName: "Beta Squad", score: 89 },
-    { teamName: "Gamma Fighters", score: 80 },
-    { teamName: "Delta Force", score: 70 },
-    { teamName: "Epsilon Eagles", score: 68 },
-    { teamName: "Zeta Smashers", score: 65 },
-    { teamName: "Theta Hunters", score: 62 },
-    { teamName: "Sigma Runners", score: 60 },
-    { teamName: "Omega Legends", score: 58 },
-    { teamName: "Lambda Warriors", score: 55 }
-  ]);
-  const [currentRound, setCurrentRound] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [round2AccessGranted, setRound2AccessGranted] = useState(false); // <-- New State
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -30,34 +13,16 @@ const Leaderboard = () => {
         const leaderboardData = response.data;
 
         leaderboardData.sort((a, b) => b.score - a.score);
-
         setTeamsRound1(leaderboardData);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch leaderboard data.',err); // Handle error
+        setError('Failed to fetch leaderboard data.');
         setLoading(false);
       }
     };
 
     fetchLeaderboard();
   }, []);
-
-  const teamsToDisplay = currentRound === 1 ? teamsRound1 : teamsRound2;
-
-  // New: Handle Round 2 button click
-  const handleRound2Click = () => {
-    if (round2AccessGranted) {
-      setCurrentRound(2);
-    } else {
-      const password = prompt('Enter Password for Round 2');
-      if (password === '22093010') {
-        setRound2AccessGranted(true);
-        setCurrentRound(2);
-      } else {
-        alert('Incorrect Password!');
-      }
-    }
-  };
 
   if (loading) {
     return (
@@ -79,21 +44,14 @@ const Leaderboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-4xl font-bold text-center text-purple-700 mb-8">Leaderboard - Round {currentRound}</h1>
+      <h1 className="text-4xl font-bold text-center text-purple-700 mb-8">Leaderboard - Round 1</h1>
 
-      {/* Buttons to switch round */}
+      {/* Round 1 button shown as active (disabled visually) */}
       <div className="flex justify-center mb-6 gap-4">
-        <button 
-          onClick={() => setCurrentRound(1)} 
-          className={`px-4 py-2 rounded-full font-semibold ${currentRound === 1 ? 'bg-purple-700 text-white' : 'bg-gray-300 text-gray-700'}`}
+        <button
+          className="px-4 py-2 rounded-full font-semibold bg-purple-700 text-white cursor-not-allowed"
         >
           Round 1
-        </button>
-        <button 
-          onClick={handleRound2Click} 
-          className={`px-4 py-2 rounded-full font-semibold ${currentRound === 2 ? 'bg-purple-700 text-white' : 'bg-gray-300 text-gray-700'}`}
-        >
-          Round 2
         </button>
       </div>
 
@@ -103,17 +61,10 @@ const Leaderboard = () => {
           <span className="text-lg font-semibold text-gray-700">Score</span>
         </div>
 
-        {/* Display each team in the leaderboard */}
+        {/* Display teams */}
         <div>
-          {teamsToDisplay.map((team, index) => {
-            let bgColor = '';
-
-            if (currentRound === 1) {
-              bgColor = index < 10 ? 'bg-green-200' : 'bg-red-200';
-            } else {
-              bgColor = index < 5 ? 'bg-green-200' : 'bg-red-200';
-            }
-
+          {teamsRound1.map((team, index) => {
+            const bgColor = index < 10 ? 'bg-green-200' : 'bg-red-200';
             return (
               <div
                 key={index}

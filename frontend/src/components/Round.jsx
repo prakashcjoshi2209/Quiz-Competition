@@ -197,9 +197,6 @@ const Round = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [teamName, setTeamName] = useState("");
 
-
-
-
   // useEffect(() => {
   //   const storedTeamName = localStorage.getItem("teamName");
   //   const storedEmail = localStorage.getItem("email");
@@ -220,15 +217,14 @@ const Round = () => {
   //   setQuestions(shuffleArray([...questionsData]));
   // }, []);
 
-
   useEffect(() => {
     const storedTeamName = localStorage.getItem("teamName");
     const storedEmail = localStorage.getItem("email");
-  
+
     if (storedTeamName && storedEmail) {
       setTeamName(storedTeamName);
       setEmail(storedEmail);
-  
+
       // ✅ Check if user already submitted
       axios
         .post("http://localhost:5000/api/auth/check-submission", {
@@ -240,7 +236,6 @@ const Round = () => {
             localStorage.setItem("round1Submitted", "true");
             // localStorage.clear(); // if you don't need anything else
 
-  
             setTimeout(() => {
               window.location.href = "/dashboard"; // Redirect if needed
             }, 2000);
@@ -259,12 +254,9 @@ const Round = () => {
         setEmail(mail);
       }
     }
-  
+
     setQuestions(shuffleArray([...questionsData]));
   }, []);
-  
-
-
 
   useEffect(() => {
     if (timer > 0) {
@@ -361,151 +353,289 @@ const Round = () => {
   if (questions.length === 0) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 p-4 sm:p-6 relative">
-      {/* Timer */}
+    // <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 p-4 sm:p-6 relative">
+    //   {/* Timer */}
 
-      <div className="absolute top-4 right-4 sm:right-6 bg-white shadow-lg rounded-full px-4 sm:px-6 py-2 text-sm sm:text-base font-bold text-purple-700">
-        {Math.floor(timer / 60)}:
-        {timer % 60 < 10 ? `0${timer % 60}` : timer % 60}
-      </div>
+    //   <div className="absolute top-4 right-4 sm:right-6 bg-white shadow-lg rounded-full px-4 sm:px-6 py-2 text-sm sm:text-base font-bold text-purple-700">
+    //     {Math.floor(timer / 60)}:
+    //     {timer % 60 < 10 ? `0${timer % 60}` : timer % 60}
+    //   </div>
 
-      {/* Heading */}
+    //   {/* Heading */}
 
-      <h1 className="text-2xl sm:text-4xl font-bold text-center text-purple-700 mb-6 sm:mb-10">
-        C Programming Quiz Competition
-      </h1>
+    //   <h1 className="text-2xl sm:text-4xl font-bold text-center text-purple-700 mb-6 sm:mb-10">
+    //     C Programming Quiz Competition
+    //   </h1>
 
-      {/* Question Blocks at the top */}
+    //   {/* Question Blocks at the top */}
 
-      <div className="grid grid-cols-5 sm:grid-cols-10 gap-2 sm:gap-4 justify-center mb-6">
-        {questions.map((_, index) => (
-          <button
+    //   <div className="grid grid-cols-5 sm:grid-cols-10 gap-2 sm:gap-4 justify-center mb-6">
+    //     {questions.map((_, index) => (
+    //       <button
+    //         key={index}
+    //         onClick={() => handleQuestionClick(index)}
+    //         className={`text-sm px-3 py-2 rounded-full ${getQuestionBlockClass(
+    //           index
+    //         )}`}
+    //       >
+    //         {index + 1}
+    //       </button>
+    //     ))}
+    //   </div>
+
+    //   {/* Main Card */}
+
+    //   <div className="max-w-3xl mx-auto bg-white p-4 sm:p-8 rounded-2xl shadow-xl">
+    //     <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">
+    //       Question {currentQuestionIndex + 1}
+    //     </h2>
+
+    //     {/* Question Image */}
+    //     <div className="w-full max-h-[300px] sm:max-h-[400px] overflow-hidden rounded-lg mb-4 sm:mb-6">
+    //       <img
+    //         src={questions[currentQuestionIndex].questionImage}
+    //         alt="Question"
+    //         className="w-full h-full object-contain"
+    //       />
+    //     </div>
+
+    //     {/* Options */}
+    //     <div className="flex flex-col gap-3 mb-6 sm:mb-8">
+    //       {questions[currentQuestionIndex].options.map((option, index) => {
+    //         const isSelected =
+    //           selectedOptions[questions[currentQuestionIndex].id] === option;
+    //         return (
+    //           <label
+    //             key={index}
+    //             className={`flex items-center gap-3 text-sm sm:text-base p-2 rounded-lg border ${
+    //               isSelected
+    //                 ? "bg-green-100 border-green-500 text-green-700"
+    //                 : "bg-gray-100"
+    //             }`}
+    //           >
+    //             <input
+    //               type="radio"
+    //               name={`question-${questions[currentQuestionIndex].id}`}
+    //               value={option}
+    //               checked={isSelected}
+    //               onChange={() => handleOptionSelect(option)}
+    //               className="form-radio text-purple-500"
+    //             />
+    //             <span>{option}</span>
+    //           </label>
+    //         );
+    //       })}
+    //     </div>
+
+    //     {/* Buttons */}
+
+    //     <div className="flex justify-between gap-4 mt-4">
+    //       <button
+    //         onClick={handlePrevQuestion}
+    //         disabled={currentQuestionIndex === 0}
+    //         className="w-1/2 sm:w-1/4 bg-purple-500 text-white py-2 rounded-full font-bold disabled:opacity-50"
+    //       >
+    //         Prev
+    //       </button>
+    //       <button
+    //         onClick={handleNextQuestion}
+    //         disabled={currentQuestionIndex === questions.length - 1}
+    //         className="w-1/2 sm:w-1/4 bg-purple-500 text-white py-2 rounded-full font-bold disabled:opacity-50"
+    //       >
+    //         Next
+    //       </button>
+    //     </div>
+
+    //     {/* Submit Button */}
+
+    //     {/* Submit Button */}
+    //     {currentQuestionIndex === questions.length - 1 && (
+    //       <button
+    //         onClick={() => setShowModal(true)}
+    //         disabled={!selectedOptions[questions[currentQuestionIndex].id]}
+    //         className="w-full mt-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-full font-bold disabled:opacity-50"
+    //       >
+    //         Submit
+    //       </button>
+    //     )}
+
+    //     {/* Modal */}
+
+    //     {showModal && (
+    //       <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50 px-4">
+    //         <div className="bg-white p-6 rounded-lg w-full max-w-xs sm:max-w-md shadow-lg">
+    //           <h3 className="text-lg sm:text-xl font-semibold mb-4">
+    //             Are you sure you want to submit?
+    //           </h3>
+    //           <label className="flex items-center gap-2 mb-4">
+    //             <input
+    //               type="checkbox"
+    //               checked={isChecked}
+    //               onChange={handleCheckboxChange}
+    //               className="form-checkbox text-purple-600"
+    //             />
+    //             <span className="text-sm">I confirm to submit.</span>
+    //           </label>
+    //           <div className="flex justify-between">
+    //             <button
+    //               onClick={handleModalClose}
+    //               className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded"
+    //             >
+    //               Cancel
+    //             </button>
+    //             <button
+    //               onClick={handleModalSubmit}
+    //               disabled={!isChecked}
+    //               className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
+    //             >
+    //               Confirm
+    //             </button>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     )}
+
+    //     <ToastContainer />
+    //   </div>
+    // </div>
+
+
+    <div className="min-h-screen bg-[#0f172a] p-4 sm:p-6 relative text-white">
+  {/* Timer */}
+  <div className="absolute top-4 right-4 sm:right-6 bg-[#1e293b] shadow-md rounded-full px-4 sm:px-6 py-2 text-sm sm:text-base font-bold text-pink-500">
+    {Math.floor(timer / 60)}:{timer % 60 < 10 ? `0${timer % 60}` : timer % 60}
+  </div>
+
+  {/* Heading */}
+  <h1 className="text-2xl sm:text-4xl font-bold text-center text-white mb-6 sm:mb-10">
+    C Programming Quiz Competition
+  </h1>
+
+  {/* Question Blocks */}
+  <div className="grid grid-cols-5 sm:grid-cols-10 gap-2 sm:gap-4 justify-center mb-6">
+    {questions.map((_, index) => (
+      <button
+        key={index}
+        onClick={() => handleQuestionClick(index)}
+        className={`text-sm px-3 py-2 rounded-full font-semibold ${getQuestionBlockClass(index)}`}
+      >
+        {index + 1}
+      </button>
+    ))}
+  </div>
+
+  {/* Main Card */}
+  <div className="max-w-3xl mx-auto bg-[#1e293b] p-4 sm:p-8 rounded-2xl shadow-xl">
+    <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">
+      Question {currentQuestionIndex + 1}
+    </h2>
+
+    {/* Question Image */}
+    <div className="w-full max-h-[300px] sm:max-h-[400px] overflow-hidden rounded-lg mb-4 sm:mb-6">
+      <img
+        src={questions[currentQuestionIndex].questionImage}
+        alt="Question"
+        className="w-full h-full object-contain bg-white rounded"
+      />
+    </div>
+
+    {/* Options */}
+    <div className="flex flex-col gap-3 mb-6 sm:mb-8">
+      {questions[currentQuestionIndex].options.map((option, index) => {
+        const isSelected =
+          selectedOptions[questions[currentQuestionIndex].id] === option;
+        return (
+          <label
             key={index}
-            onClick={() => handleQuestionClick(index)}
-            className={`text-sm px-3 py-2 rounded-full ${getQuestionBlockClass(
-              index
-            )}`}
+            className={`flex items-center gap-3 text-sm sm:text-base p-2 rounded-lg border ${
+              isSelected
+                ? "bg-green-600 border-green-400 text-white"
+                : "bg-[#334155] border-[#475569] text-white"
+            }`}
           >
-            {index + 1}
-          </button>
-        ))}
-      </div>
+            <input
+              type="radio"
+              name={`question-${questions[currentQuestionIndex].id}`}
+              value={option}
+              checked={isSelected}
+              onChange={() => handleOptionSelect(option)}
+              className="form-radio text-pink-500"
+            />
+            <span>{option}</span>
+          </label>
+        );
+      })}
+    </div>
 
-      {/* Main Card */}
+    {/* Navigation Buttons */}
+    <div className="flex justify-between gap-4 mt-4">
+      <button
+        onClick={handlePrevQuestion}
+        disabled={currentQuestionIndex === 0}
+        className="w-1/2 sm:w-1/4 bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-full font-bold disabled:opacity-50"
+      >
+        Prev
+      </button>
+      <button
+        onClick={handleNextQuestion}
+        disabled={currentQuestionIndex === questions.length - 1}
+        className="w-1/2 sm:w-1/4 bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-full font-bold disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
 
-      <div className="max-w-3xl mx-auto bg-white p-4 sm:p-8 rounded-2xl shadow-xl">
-        <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">
-          Question {currentQuestionIndex + 1}
-        </h2>
+    {/* Submit Button */}
+    {currentQuestionIndex === questions.length - 1 && (
+      <button
+        onClick={() => setShowModal(true)}
+        disabled={!selectedOptions[questions[currentQuestionIndex].id]}
+        className="w-full mt-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white py-3 rounded-full font-bold disabled:opacity-50"
+      >
+        Submit
+      </button>
+    )}
+  </div>
 
-        {/* Question Image */}
-        <div className="w-full max-h-[300px] sm:max-h-[400px] overflow-hidden rounded-lg mb-4 sm:mb-6">
-          <img
-            src={questions[currentQuestionIndex].questionImage}
-            alt="Question"
-            className="w-full h-full object-contain"
+  {/* Modal */}
+  {showModal && (
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-60 z-50 px-4">
+      <div className="bg-[#1e293b] text-white p-6 rounded-lg w-full max-w-xs sm:max-w-md shadow-lg">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4">
+          Are you sure you want to submit?
+        </h3>
+        <label className="flex items-center gap-2 mb-4">
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+            className="form-checkbox text-pink-500"
           />
-        </div>
-
-        {/* Options */}
-        <div className="flex flex-col gap-3 mb-6 sm:mb-8">
-          {questions[currentQuestionIndex].options.map((option, index) => {
-            const isSelected =
-              selectedOptions[questions[currentQuestionIndex].id] === option;
-            return (
-              <label
-                key={index}
-                className={`flex items-center gap-3 text-sm sm:text-base p-2 rounded-lg border ${
-                  isSelected
-                    ? "bg-green-100 border-green-500 text-green-700"
-                    : "bg-gray-100"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name={`question-${questions[currentQuestionIndex].id}`}
-                  value={option}
-                  checked={isSelected}
-                  onChange={() => handleOptionSelect(option)}
-                  className="form-radio text-purple-500"
-                />
-                <span>{option}</span>
-              </label>
-            );
-          })}
-        </div>
-
-        {/* Buttons */}
-
-        <div className="flex justify-between gap-4 mt-4">
+          <span className="text-sm">I confirm to submit.</span>
+        </label>
+        <div className="flex justify-between">
           <button
-            onClick={handlePrevQuestion}
-            disabled={currentQuestionIndex === 0}
-            className="w-1/2 sm:w-1/4 bg-purple-500 text-white py-2 rounded-full font-bold disabled:opacity-50"
+            onClick={handleModalClose}
+            className="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded"
           >
-            Prev
+            Cancel
           </button>
           <button
-            onClick={handleNextQuestion}
-            disabled={currentQuestionIndex === questions.length - 1}
-            className="w-1/2 sm:w-1/4 bg-purple-500 text-white py-2 rounded-full font-bold disabled:opacity-50"
+            onClick={handleModalSubmit}
+            disabled={!isChecked}
+            className="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
           >
-            Next
+            Confirm
           </button>
         </div>
-
-        {/* Submit Button */}
-
-        {/* Submit Button */}
-        {currentQuestionIndex === questions.length - 1 && (
-          <button
-            onClick={() => setShowModal(true)}
-            disabled={!selectedOptions[questions[currentQuestionIndex].id]}
-            className="w-full mt-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-full font-bold disabled:opacity-50"
-          >
-            Submit
-          </button>
-        )}
-
-        {/* Modal */}
-
-        {showModal && (
-          <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-50 px-4">
-            <div className="bg-white p-6 rounded-lg w-full max-w-xs sm:max-w-md shadow-lg">
-              <h3 className="text-lg sm:text-xl font-semibold mb-4">
-                Are you sure you want to submit?
-              </h3>
-              <label className="flex items-center gap-2 mb-4">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                  className="form-checkbox text-purple-600"
-                />
-                <span className="text-sm">I confirm to submit.</span>
-              </label>
-              <div className="flex justify-between">
-                <button
-                  onClick={handleModalClose}
-                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleModalSubmit}
-                  disabled={!isChecked}
-                  className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
-                >
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <ToastContainer />
       </div>
     </div>
+  )}
+
+  <ToastContainer />
+</div>
+
+
   );
 };
 
