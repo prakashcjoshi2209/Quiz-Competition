@@ -197,13 +197,58 @@ const Round = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [teamName, setTeamName] = useState("");
 
+
+
+
+  // useEffect(() => {
+  //   const storedTeamName = localStorage.getItem("teamName");
+  //   const storedEmail = localStorage.getItem("email");
+
+  //   if (storedTeamName && storedEmail) {
+  //     setTeamName(storedTeamName);
+  //     setEmail(storedEmail);
+  //   } else {
+  //     const name = prompt("Enter your Team Name:");
+  //     const mail = prompt("Enter your Email:");
+  //     if (name && mail) {
+  //       localStorage.setItem("teamName", name);
+  //       localStorage.setItem("email", mail);
+  //       setTeamName(name);
+  //       setEmail(mail);
+  //     }
+  //   }
+  //   setQuestions(shuffleArray([...questionsData]));
+  // }, []);
+
+
   useEffect(() => {
     const storedTeamName = localStorage.getItem("teamName");
     const storedEmail = localStorage.getItem("email");
-
+  
     if (storedTeamName && storedEmail) {
       setTeamName(storedTeamName);
       setEmail(storedEmail);
+  
+      // ✅ Check if user already submitted
+      axios
+        .post("http://localhost:5000/api/auth/check-submission", {
+          email: storedEmail,
+        })
+        .then((res) => {
+          if (res.data.alreadySubmitted) {
+            toast.warn("You have already submitted Round 1!");
+            localStorage.setItem("round1Submitted", "true");
+            // localStorage.clear(); // if you don't need anything else
+
+  
+            setTimeout(() => {
+              window.location.href = "/dashboard"; // Redirect if needed
+            }, 2000);
+          }
+        })
+        .catch((err) => {
+          console.error("Error checking submission:", err);
+        });
     } else {
       const name = prompt("Enter your Team Name:");
       const mail = prompt("Enter your Email:");
@@ -214,8 +259,12 @@ const Round = () => {
         setEmail(mail);
       }
     }
+  
     setQuestions(shuffleArray([...questionsData]));
   }, []);
+  
+
+
 
   useEffect(() => {
     if (timer > 0) {
@@ -257,9 +306,8 @@ const Round = () => {
       });
       toast.success("Submit Successfully!");
 
-     // localstorage me true
+      // localstorage me true
       localStorage.setItem("round1Submitted", "true");
-
     } catch (error) {
       console.error("Error submitting:", error);
       toast.error("Failed to submit!");

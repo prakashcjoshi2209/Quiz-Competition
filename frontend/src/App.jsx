@@ -9,6 +9,7 @@ import Round from './components/Round';
 import Leaderboard from './components/Leaderboard';
 
 import Round2 from './components/Round2';
+import Admin from './components/Admin';
 
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
         <Route path="/round1" element={<Round/>} />
         <Route path="/round2" element={<Round2/>} />
         <Route path="/leader" element={<Leaderboard/>} />
+        <Route path="/admin" element={<Admin/>} />
+
 
       </Routes>
       <ToastContainer />

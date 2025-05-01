@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { FaUserCircle, FaTimes, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +14,22 @@ const Dashboard = () => {
   const [password, setPassword] = useState("");
   const [isEligibleForRound2, setIsEligibleForRound2] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+
+  const openAdminModal = () => setIsAdminModalOpen(true);
+  const closeAdminModal = () => {
+    setIsAdminModalOpen(false);
+    setAdminPassword("");
+  };
+  const handleAdminAccess = () => {
+    if (adminPassword === "@admin1234") {
+      navigate("/admin");
+      closeAdminModal();
+    } else {
+      alert("You are not able to access admin side.");
+    }
+  };
 
   useEffect(() => {
     const submitted = localStorage.getItem("round1Submitted");
@@ -22,10 +37,14 @@ const Dashboard = () => {
 
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/auth/leaderboard");
+        const response = await axios.get(
+          "http://localhost:5000/api/auth/leaderboard"
+        );
         const leaderboardData = response.data.sort((a, b) => b.score - a.score);
         const top10 = leaderboardData.slice(0, 10);
-        setIsEligibleForRound2(top10.some(team => team.teamName === teamName));
+        setIsEligibleForRound2(
+          top10.some((team) => team.teamName === teamName)
+        );
       } catch (err) {
         console.error("Failed to fetch leaderboard data:", err);
       }
@@ -37,7 +56,9 @@ const Dashboard = () => {
     const email = localStorage.getItem("email");
 
     if (content.includes("Round 1") && round1Submitted) {
-      return alert(email ? "You have already submitted Round 1." : "Email not found!");
+      return alert(
+        email ? "You have already submitted Round 1." : "Email not found!"
+      );
     }
 
     if (content.includes("Round 2") && !isEligibleForRound2) {
@@ -63,9 +84,16 @@ const Dashboard = () => {
   const handleOk = () => {
     if (modalContent.includes("Round 1")) {
       navigate("/round1");
-    } else if (modalContent.includes("Leaderboard") && password === "30102209") {
+    } else if (
+      modalContent.includes("Leaderboard") &&
+      password === "30102209"
+    ) {
       navigate("/leader");
-    } else if (modalContent.includes("Round 2") && isEligibleForRound2 && password === "30220910") {
+    } else if (
+      modalContent.includes("Round 2") &&
+      isEligibleForRound2 &&
+      password === "30220910"
+    ) {
       navigate("/round2");
     } else {
       alert("Incorrect or Unauthorized Access");
@@ -76,13 +104,6 @@ const Dashboard = () => {
 
   const handleLogout = () => setIsLogoutModalOpen(true);
   const handleLogoutConfirm = () => {
-    
-  
-    // localStorage.removeItem("round1Submitted");
-
-  
-
-
     toast.success("Logout Successful!", {
       position: "top-right",
       autoClose: 3000,
@@ -97,9 +118,20 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 p-4 sm:p-6">
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 space-y-4 sm:space-y-0">
-        <h1 className="text-3xl font-bold text-purple-700 text-center sm:text-left">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-purple-700 text-center sm:text-left">
+          Dashboard
+        </h1>
+        <button
+          onClick={openAdminModal}
+          className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-2 rounded-full font-semibold hover:scale-105 transition-transform duration-300"
+        >
+          Admin
+        </button>
+
         <div className="flex items-center space-x-3">
-          <span className="text-gray-700 font-semibold text-lg">Welcome, {teamName}!</span>
+          <span className="text-gray-700 font-semibold text-lg">
+            Welcome, {teamName}!
+          </span>
           <FaUserCircle className="text-3xl text-purple-700" />
         </div>
       </div>
@@ -113,7 +145,9 @@ const Dashboard = () => {
             color: "from-purple-500 to-pink-500",
             text: "text-purple-600",
             onClick: () =>
-              openModal("Instructions for Round 1:\n- Complete the quiz.\n- Top 10 teams will be selected.\n- Time limit: 30 minutes."),
+              openModal(
+                "Instructions for Round 1:\n- Complete the quiz.\n- Top 10 teams will be selected.\n- Time limit: 30 minutes."
+              ),
           },
           {
             title: "Round 2",
@@ -121,7 +155,9 @@ const Dashboard = () => {
             color: "from-pink-500 to-yellow-400",
             text: "text-pink-600",
             onClick: () =>
-              openModal("Instructions for Round 2:\n- Solve problem statements.\n- Top 5 teams will be selected.\n- Time limit: 45 minutes."),
+              openModal(
+                "Instructions for Round 2:\n- Solve problem statements.\n- Top 5 teams will be selected.\n- Time limit: 45 minutes."
+              ),
           },
           {
             title: "Round 3",
@@ -129,7 +165,9 @@ const Dashboard = () => {
             color: "from-yellow-400 to-green-400",
             text: "text-yellow-600",
             onClick: () =>
-              openModal("Instructions for Round 3:\n- Rapid fire offline round.\n- Be quick and accurate.\n- Shortest correct answers win!"),
+              openModal(
+                "Instructions for Round 3:\n- Rapid fire offline round.\n- Be quick and accurate.\n- Shortest correct answers win!"
+              ),
           },
           {
             title: "Leaderboard",
@@ -137,14 +175,18 @@ const Dashboard = () => {
             color: "from-green-400 to-blue-400",
             text: "text-green-600",
             onClick: () =>
-              openModal("Instructions for Leaderboard:\n- View the latest rankings.\n- Keep track of your performance!"),
+              openModal(
+                "Instructions for Leaderboard:\n- View the latest rankings.\n- Keep track of your performance!"
+              ),
           },
         ].map((card, idx) => (
           <div
             key={idx}
             className="bg-white p-6 rounded-3xl shadow-xl flex flex-col items-center justify-between hover:shadow-2xl transition-all duration-300"
           >
-            <h2 className={`text-2xl font-bold mb-4 ${card.text}`}>{card.title}</h2>
+            <h2 className={`text-2xl font-bold mb-4 ${card.text}`}>
+              {card.title}
+            </h2>
             <p className="text-gray-600 text-center mb-6">{card.desc}</p>
             <button
               onClick={card.onClick}
@@ -169,22 +211,17 @@ const Dashboard = () => {
       {isLogoutModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-3xl p-6 w-11/12 max-w-md relative">
+            <button
+              onClick={handleLogout}
+              className="fixed bottom-5 right-5 bg-red-600 text-white py-2 px-4 rounded-full shadow-lg hover:bg-red-700 flex items-center space-x-2"
+            >
+              <FaSignOutAlt size={20} />
+              <span className="hidden sm:inline font-medium">Logout</span>
+            </button>
 
-
-          
-
-<button
-  onClick={handleLogout}
-  className="fixed bottom-5 right-5 bg-red-600 text-white py-2 px-4 rounded-full shadow-lg hover:bg-red-700 flex items-center space-x-2"
->
-  <FaSignOutAlt size={20} />
-  <span className="hidden sm:inline font-medium">Logout</span>
-</button>
-
-
-
-
-            <h2 className="text-2xl font-bold text-red-600 mb-4">Are you sure you want to logout?</h2>
+            <h2 className="text-2xl font-bold text-red-600 mb-4">
+              Are you sure you want to logout?
+            </h2>
             <div className="flex justify-around">
               <button
                 onClick={handleLogoutConfirm}
@@ -213,10 +250,15 @@ const Dashboard = () => {
             >
               <FaTimes size={24} />
             </button>
-            <h2 className="text-2xl font-bold text-purple-700 mb-4">Instructions</h2>
-            <p className="text-gray-700 whitespace-pre-line mb-6">{modalContent}</p>
+            <h2 className="text-2xl font-bold text-purple-700 mb-4">
+              Instructions
+            </h2>
+            <p className="text-gray-700 whitespace-pre-line mb-6">
+              {modalContent}
+            </p>
 
-            {(modalContent.includes("Leaderboard") || modalContent.includes("Round 2")) && (
+            {(modalContent.includes("Leaderboard") ||
+              modalContent.includes("Round 2")) && (
               <input
                 type="password"
                 placeholder="Enter Password"
@@ -247,6 +289,35 @@ const Dashboard = () => {
                 OK
               </button>
             )}
+          </div>
+        </div>
+      )}
+
+      {isAdminModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-3xl p-6 w-11/12 max-w-md relative">
+            <button
+              onClick={closeAdminModal}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+            >
+              <FaTimes size={24} />
+            </button>
+            <h2 className="text-2xl font-bold text-indigo-600 mb-4 text-center">
+              Admin Access
+            </h2>
+            <input
+              type="password"
+              placeholder="Enter Admin Password"
+              value={adminPassword}
+              onChange={(e) => setAdminPassword(e.target.value)}
+              className="w-full p-2 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4"
+            />
+            <button
+              onClick={handleAdminAccess}
+              className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white py-2 w-full rounded-full font-semibold hover:scale-105 transition-transform duration-300"
+            >
+              Submit
+            </button>
           </div>
         </div>
       )}

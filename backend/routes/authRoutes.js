@@ -6,7 +6,7 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
-// Score Submit Route: POST /api/submit
+// Submit Score Route
 router.post('/submit', async (req, res) => {
   const { teamName, score, email } = req.body;
 
@@ -15,50 +15,47 @@ router.post('/submit', async (req, res) => {
   }
 
   try {
-    // Pehle check karo ki yeh email se already score submit hua hai ya nahi
     const existingSubmission = await Score.findOne({ email });
 
     if (existingSubmission) {
       return res.status(400).json({ message: 'Already submitted for Round 1' });
     }
 
-    // Agar nahi hua hai toh naya score save karo
     const newScore = new Score({ teamName, score, email });
     await newScore.save();
+
+    console.log("Received:", req.body);
     res.status(201).json({ message: 'Score submitted successfully' });
 
   } catch (error) {
-    console.error(error);
+    console.error('Error while submitting score:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Leaderboard Route: GET /api/leaderboard
+// Leaderboard Route
 router.get('/leaderboard', async (req, res) => {
   try {
-    const leaderboard = await Score.find({}).sort({ score: -1 }); // High to Low
+    const leaderboard = await Score.find({}).sort({ score: -1 });
     res.json(leaderboard);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch leaderboard data' });
   }
 });
 
-// Signup API
+// Signup Route
 router.post('/signup', async (req, res) => {
   try {
     const { teamName, firstMember, secondMember, email, password } = req.body;
 
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists with this email' });
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create User
     const newUser = new User({
       teamName,
       firstMember,
@@ -76,24 +73,21 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Login API
+// Login Route
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'User not found' });
     }
 
-    // Validate Password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid Credentials' });
     }
 
-    // Success
     res.status(200).json({ 
       message: 'Login successful', 
       teamName: user.teamName,
@@ -106,18 +100,67 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// API to Check Submission Status based on Email
-router.get('/check-submission/:email', async (req, res) => {
+// ✅ New Route to Check if Email Exists in Score Collection
+router.get('/score/check/:email', async (req, res) => {
   try {
     const { email } = req.params;
-    const existingSubmission = await Score.findOne({ email });
+    const exists = await Score.findOne({ email });
 
-    if (existingSubmission) {
-      return res.status(200).json({ submitted: true });
-    } else {
-      return res.status(200).json({ submitted: false });
+    res.status(200).json({ exists: !!exists });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// Get all login users (For Admin Panel)
+router.get('/login-users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// Get all Round 1 Scores (For Admin Panel)
+router.get('/round1-scores', async (req, res) => {
+  try {
+    const scores = await Score.find();
+    res.status(200).json(scores);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// Delete a login user (For Admin Panel)
+router.delete('/login-users/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
 
+// Delete a Round 1 score (For Admin Panel)
+router.delete('/round1-scores/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const score = await Score.findByIdAndDelete(id);
+    if (!score) {
+      return res.status(404).json({ message: 'Score not found' });
+    }
+    res.status(200).json({ message: 'Score deleted successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });

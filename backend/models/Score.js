@@ -2,12 +2,17 @@ import mongoose from 'mongoose';
 
 const scoreSchema = new mongoose.Schema({
 
-    email: { type: String, required: true, unique: true },
+  
 
 
   teamName: {
     type: String,
     required: true,
+  },
+
+  email: {
+    type: String,          // ✅ type check
+    required: true,        // ✅ optional: required bhi rakho
   },
   score: {
     type: Number,

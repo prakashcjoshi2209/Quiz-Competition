@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -15,47 +14,9 @@ const LoginPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-    
-
-  //   try {
-  //     const response = await fetch("http://localhost:5000/api/auth/login", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         email: formData.email,
-  //         password: formData.password,
-  //       }),
-  //     });
-
-  //     const data = await response.json();
-  //     console.log(data);
-
-  //     if (response.ok) {
-  //       toast.success("Login Successful 🎉");
-
-  //       // Save email and teamName in localStorage
-  //       localStorage.setItem('teamName', data.teamName);
-  //       localStorage.setItem('email', formData.email);
-        
-
-  //       navigate("/dashboard"); // Login ke baad dashboard me jao
-  //     } else {
-  //       toast.error(data.message || "Login Failed ❌");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast.error("Something went wrong ❌");
-  //   }
-  // };
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
@@ -67,29 +28,43 @@ const LoginPage = () => {
           password: formData.password,
         }),
       });
-  
+
       const data = await response.json();
-      console.log(data);
-  
+      console.log("Login Response:", data);
+
       if (response.ok) {
         toast.success("Login Successful 🎉");
-  
+
         const previousEmail = localStorage.getItem("email");
         const previousTeamName = localStorage.getItem("teamName");
-  
-        // Check if user is different
+
         const isDifferentUser =
-          previousEmail !== formData.email || previousTeamName !== data.teamName;
-  
+          previousEmail !== formData.email ||
+          previousTeamName !== data.teamName;
+
         if (isDifferentUser) {
-          // Reset round1Submitted if new/different user logs in
+          // Reset previous login state
           localStorage.setItem("round1Submitted", "false");
         }
-  
+
         // Save new login info
         localStorage.setItem("teamName", data.teamName);
         localStorage.setItem("email", formData.email);
-  
+
+        // ✅ Check if email exists in Score collection
+        const scoreCheck = await fetch(
+          `http://localhost:5000/api/auth/score/check/${formData.email}`
+        );
+        const scoreData = await scoreCheck.json();
+        console.log("Score Check Response:", scoreData);
+
+        // ✅ Set round1Submitted based on DB result
+        if (scoreData.exists) {
+          localStorage.setItem("round1Submitted", "true");
+        } else {
+          localStorage.setItem("round1Submitted", "false");
+        }
+
         navigate("/dashboard");
       } else {
         toast.error(data.message || "Login Failed ❌");
@@ -99,9 +74,6 @@ const LoginPage = () => {
       toast.error("Something went wrong ❌");
     }
   };
-  
-
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-300 via-pink-200 to-yellow-200 p-6">
