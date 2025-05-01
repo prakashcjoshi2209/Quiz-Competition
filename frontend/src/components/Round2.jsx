@@ -26,9 +26,8 @@ const Round2 = () => {
           <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
             <h2 className="text-2xl font-semibold mb-3">Test Instructions</h2>
             <p className="text-sm">
-              In this test series, you will find 5 coding questions with varying
-              difficulty levels. Each question is carefully selected to help you
-              improve your problem-solving skills.
+            In this test series, you will be presented with 5 coding questions. You are required to solve any 3 of your choice.
+            Each question carries 10 points, and the top 5 teams with the highest total scores will be shortlisted for the final round of the competition.
             </p>
             <p className="text-sm">
               Please read each question carefully, and try to write clean,

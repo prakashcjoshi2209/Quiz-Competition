@@ -14,6 +14,10 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 // Connect Database and Run Server
 connectDB();
