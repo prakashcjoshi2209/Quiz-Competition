@@ -12,7 +12,7 @@ import Round2 from './components/Round2';
 import Admin from './components/Admin';
 import Round3 from './components/Round3';
 
-import LeaderBoard from './components/LeaderBoard';
+import Progress from './components/Progress';
 
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>} />
         <Route path="/round1" element={<Round/>} />
         <Route path="/round2" element={<Round2/>} />
-        <Route path="/leader" element={<LeaderBoard/>} />
+        <Route path="/leader" element={<Progress/>} />
         <Route path="/admin" element={<Admin/>} />
         <Route path="/round3" element={<Round3/>} />
 

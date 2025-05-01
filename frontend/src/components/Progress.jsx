@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const LeaderBoard = () => {
+const Progress = () => {
   const [teamsRound1, setTeamsRound1] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -81,4 +81,4 @@ const LeaderBoard = () => {
   );
 };
 
-export default LeaderBoard
+export default Progress
