@@ -65,9 +65,6 @@ const Dashboard = () => {
       return alert("You are not eligible for Round 2.");
     }
 
-    if (content.includes("Round 3")) {
-      return alert("This round is only for students selected for Round 3.");
-    }
 
     setModalContent(content);
     setIsModalOpen(true);
@@ -95,6 +92,8 @@ const Dashboard = () => {
       password === "30220910"
     ) {
       navigate("/round2");
+    } else if (modalContent.includes("Round 3") && password === "12344321") {
+      navigate("/round3");
     } else {
       alert("Incorrect or Unauthorized Access");
       return;
@@ -258,7 +257,8 @@ const Dashboard = () => {
             </p>
 
             {(modalContent.includes("Leaderboard") ||
-              modalContent.includes("Round 2")) && (
+              modalContent.includes("Round 2") ||
+              modalContent.includes("Round 3")) && (
               <input
                 type="password"
                 placeholder="Enter Password"

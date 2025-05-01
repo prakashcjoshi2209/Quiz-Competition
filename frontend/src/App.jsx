@@ -6,10 +6,12 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './components/DashBoard';
 import Round from './components/Round';
-import Leaderboard from './components/Leaderboard';
+
 
 import Round2 from './components/Round2';
 import Admin from './components/Admin';
+import Round3 from './components/Round3';
+import Leaderboard from './components/LeaderBoard';
 
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
         <Route path="/round2" element={<Round2/>} />
         <Route path="/leader" element={<Leaderboard/>} />
         <Route path="/admin" element={<Admin/>} />
+        <Route path="/round3" element={<Round3/>} />
+
 
 
       </Routes>
