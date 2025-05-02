@@ -3,9 +3,12 @@ import { FaUserCircle, FaTimes, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuth();  // Assuming you have this from AuthContext
+
   const teamName = localStorage.getItem("teamName") || "User";
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
@@ -101,17 +104,33 @@ const Dashboard = () => {
     closeModal();
   };
 
+
+
   const handleLogout = () => setIsLogoutModalOpen(true);
-  const handleLogoutConfirm = () => {
-    toast.success("Logout Successful!", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-    });
-    navigate("/login");
-    setIsLogoutModalOpen(false);
-  };
-  const handleLogoutCancel = () => setIsLogoutModalOpen(false);
+
+const handleLogoutConfirm = () => {
+  // Remove user data from localStorage or sessionStorage
+  localStorage.removeItem('user'); // or sessionStorage.removeItem('user');
+
+  // Reset the user state (if using context or state management for auth)
+  setUser(null); // Update the user state (this could be from context)
+
+  // Show toast for successful logout
+  toast.success("Logout Successful!", {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: true,
+  });
+
+  // Navigate to login page
+  navigate("/login");
+
+  // Close the logout modal
+  setIsLogoutModalOpen(false);
+};
+
+const handleLogoutCancel = () => setIsLogoutModalOpen(false);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 p-4 sm:p-6">

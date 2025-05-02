@@ -8,6 +8,7 @@ import { FaUser, FaEnvelope, FaLock, FaUsers } from 'react-icons/fa'; // Icon ma
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  
 
   const [formData, setFormData] = useState({
     teamName: '',

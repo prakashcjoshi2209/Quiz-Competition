@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { FaEnvelope, FaLock, FaUsers } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,9 +15,11 @@ const LoginPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch("https://quiz-competition-6au4.onrender.com/api/auth/login", {
         method: "POST",
@@ -30,44 +31,52 @@ const LoginPage = () => {
           password: formData.password,
         }),
       });
-
+  
       const data = await response.json();
       console.log("Login Response:", data);
-
+  
       if (response.ok) {
         toast.success("Login Successful 🎉");
-
+  
         const previousEmail = localStorage.getItem("email");
         const previousTeamName = localStorage.getItem("teamName");
-
+  
         const isDifferentUser =
           previousEmail !== formData.email ||
           previousTeamName !== data.teamName;
-
+  
         if (isDifferentUser) {
-          // Reset previous login state
           localStorage.setItem("round1Submitted", "false");
         }
-
+  
         // Save new login info
         localStorage.setItem("teamName", data.teamName);
         localStorage.setItem("email", formData.email);
-
+  
+        // ✅ Save user object for PrivateRoute
+        localStorage.setItem("user", JSON.stringify({
+          teamName: data.teamName,
+          email: formData.email,
+        }));
+  
         // ✅ Check if email exists in Score collection
         const scoreCheck = await fetch(
           `https://quiz-competition-6au4.onrender.com/api/auth/score/check/${formData.email}`
         );
         const scoreData = await scoreCheck.json();
         console.log("Score Check Response:", scoreData);
-
-        // ✅ Set round1Submitted based on DB result
+  
         if (scoreData.exists) {
           localStorage.setItem("round1Submitted", "true");
         } else {
           localStorage.setItem("round1Submitted", "false");
         }
-
-        navigate("/dashboard");
+  
+        // ✅ Navigate after a small delay for toast display
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
+  
       } else {
         toast.error(data.message || "Login Failed ❌");
       }
@@ -76,6 +85,7 @@ const LoginPage = () => {
       toast.error("Something went wrong ❌");
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] p-6">

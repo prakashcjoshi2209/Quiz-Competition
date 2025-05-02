@@ -197,9 +197,29 @@ const Round = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [teamName, setTeamName] = useState("");
 
- 
 
-  useEffect(() => {
+useEffect(() => {
+  const preloadImages = async () => {
+    const imagePromises = questionsData.map((question) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = question.questionImage.startsWith("/")
+          ? question.questionImage
+          : `/${question.questionImage}`;
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+    });
+
+    try {
+      await Promise.all(imagePromises);
+      setQuestions(shuffleArray([...questionsData]));
+    } catch (error) {
+      console.error("Image loading failed:", error);
+    }
+  };
+
+  const initializeUser = async () => {
     const storedTeamName = localStorage.getItem("teamName");
     const storedEmail = localStorage.getItem("email");
 
@@ -207,25 +227,21 @@ const Round = () => {
       setTeamName(storedTeamName);
       setEmail(storedEmail);
 
-      // ✅ Check if user already submitted
-      axios
-        .post("https://quiz-competition-6au4.onrender.com/api/auth/check-submission", {
-          email: storedEmail,
-        })
-        .then((res) => {
-          if (res.data.alreadySubmitted) {
-            toast.warn("You have already submitted Round 1!");
-            localStorage.setItem("round1Submitted", "true");
-            // localStorage.clear(); // if you don't need anything else
-
-            setTimeout(() => {
-              window.location.href = "/dashboard"; // Redirect if needed
-            }, 2000);
-          }
-        })
-        .catch((err) => {
-          console.error("Error checking submission:", err);
-        });
+      try {
+        const res = await axios.post(
+          "https://quiz-competition-6au4.onrender.com/api/auth/check-submission",
+          { email: storedEmail }
+        );
+        if (res.data.alreadySubmitted) {
+          toast.warn("You have already submitted Round 1!");
+          localStorage.setItem("round1Submitted", "true");
+          setTimeout(() => {
+            window.location.href = "/dashboard";
+          }, 2000);
+        }
+      } catch (err) {
+        console.error("Error checking submission:", err);
+      }
     } else {
       const name = prompt("Enter your Team Name:");
       const mail = prompt("Enter your Email:");
@@ -236,9 +252,54 @@ const Round = () => {
         setEmail(mail);
       }
     }
+  };
 
-    setQuestions(shuffleArray([...questionsData]));
-  }, []);
+  preloadImages();
+  initializeUser();
+}, []);
+
+ 
+
+  // useEffect(() => {
+  //   const storedTeamName = localStorage.getItem("teamName");
+  //   const storedEmail = localStorage.getItem("email");
+
+  //   if (storedTeamName && storedEmail) {
+  //     setTeamName(storedTeamName);
+  //     setEmail(storedEmail);
+
+  //     // ✅ Check if user already submitted
+  //     axios
+  //       .post("https://quiz-competition-6au4.onrender.com/api/auth/check-submission", {
+  //         email: storedEmail,
+  //       })
+  //       .then((res) => {
+  //         if (res.data.alreadySubmitted) {
+  //           toast.warn("You have already submitted Round 1!");
+  //           localStorage.setItem("round1Submitted", "true");
+  //           // localStorage.clear(); // if you don't need anything else
+
+  //           setTimeout(() => {
+  //             window.location.href = "/dashboard"; // Redirect if needed
+  //           }, 2000);
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.error("Error checking submission:", err);
+  //       });
+  //   } else {
+  //     const name = prompt("Enter your Team Name:");
+  //     const mail = prompt("Enter your Email:");
+  //     if (name && mail) {
+  //       localStorage.setItem("teamName", name);
+  //       localStorage.setItem("email", mail);
+  //       setTeamName(name);
+  //       setEmail(mail);
+  //     }
+  //   }
+
+  //   setQuestions(shuffleArray([...questionsData]));
+  // }, []);
 
   useEffect(() => {
     if (timer > 0) {
@@ -369,13 +430,27 @@ const Round = () => {
     </h2>
 
     {/* Question Image */}
-    <div className="w-full max-h-[300px] sm:max-h-[400px] overflow-hidden rounded-lg mb-4 sm:mb-6">
+    {/* <div className="w-full max-h-[300px] sm:max-h-[400px] overflow-hidden rounded-lg mb-4 sm:mb-6">
       <img
         src={questions[currentQuestionIndex].questionImage}
         alt="Question"
         className="w-full h-full object-contain bg-white rounded"
       />
-    </div>
+    </div> */}
+
+<div className="w-full overflow-x-auto rounded-lg mb-4 sm:mb-6 bg-white p-2">
+  <img
+    src={
+      questions[currentQuestionIndex]?.questionImage?.startsWith("/")
+        ? questions[currentQuestionIndex].questionImage
+        : `/${questions[currentQuestionIndex]?.questionImage}`
+    }
+    alt="Question"
+    className="w-full h-auto object-contain rounded"
+  />
+</div>
+
+
 
     {/* Options */}
     <div className="flex flex-col gap-3 mb-6 sm:mb-8">
