@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Loader from './Loader';
 
 const Progress = () => {
   const [teamsRound1, setTeamsRound1] = useState([]);
@@ -28,7 +29,7 @@ const Progress = () => {
     return (
       <div className="min-h-screen bg-gray-100 p-6">
         <h1 className="text-4xl font-bold text-center text-purple-700 mb-8">Leaderboard</h1>
-        <div className="text-center text-lg text-purple-700">Loading...</div>
+        <div className="text-center text-lg text-purple-700"><Loader/></div>
       </div>
     );
   }

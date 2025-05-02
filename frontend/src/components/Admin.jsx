@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Loader from './Loader';
 
 const Admin = () => {
   const [loginUsers, setLoginUsers] = useState([]);
@@ -116,7 +117,7 @@ const Admin = () => {
           <>
             <h2 className="text-3xl font-bold text-center mb-6">👥 Login Users</h2>
             {loadingUsers ? (
-              <p className="text-center text-black/80">Loading users...</p>
+              <p className="text-center text-black/80"><Loader/></p>
             ) : loginUsers.length > 0 ? (
               <div className="grid gap-4">
                 {loginUsers.map(user => (
@@ -148,7 +149,7 @@ const Admin = () => {
           <>
             <h2 className="text-3xl font-bold text-center mb-6">🏆 Round 1 Scores</h2>
             {loadingScores ? (
-              <p className="text-center text-white/80">Loading scores...</p>
+              <p className="text-center text-white/80"><Loader/></p>
             ) : round1Scores.length > 0 ? (
               <div className="grid gap-4">
                 {round1Scores.map(score => (

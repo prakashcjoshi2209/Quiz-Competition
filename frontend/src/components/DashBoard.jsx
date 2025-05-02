@@ -58,6 +58,8 @@ const Dashboard = () => {
   const openModal = (content) => {
     const email = localStorage.getItem("email");
 
+    
+
     if (content.includes("Round 1") && round1Submitted) {
       return alert(
         email ? "You have already submitted Round 1." : "Email not found!"
