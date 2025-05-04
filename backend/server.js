@@ -8,7 +8,16 @@ dotenv.config();
 const app = express();
 
 // Middlewares
-app.use(cors());
+// app.use(cors());
+
+app.use(cors({
+  origin: 'https://quiz-competition-five.vercel.app/', // Frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+  preflightContinue: true,
+  maxAge: 86400 // Cache preflight request for 24 hours
+}));
+
 app.use(express.json());
 
 // Routes
