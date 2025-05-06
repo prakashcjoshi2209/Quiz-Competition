@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { setUser } = useAuth();  // Assuming you have this from AuthContext
+  const { setUser } = useAuth(); // Assuming you have this from AuthContext
 
   const teamName = localStorage.getItem("teamName") || "User";
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
+  const [dashboardMessage, setDashboardMessage] = useState("");
 
   const openAdminModal = () => setIsAdminModalOpen(true);
   const closeAdminModal = () => {
@@ -34,6 +35,8 @@ const Dashboard = () => {
     }
   };
 
+
+
   useEffect(() => {
     const submitted = localStorage.getItem("round1Submitted");
     if (submitted === "true") setRound1Submitted(true);
@@ -48,17 +51,39 @@ const Dashboard = () => {
         setIsEligibleForRound2(
           top10.some((team) => team.teamName === teamName)
         );
+
+        // Check if user is in top 10 and display message
+        const visited = localStorage.getItem("visitedLeaderboard"); // FIXED
+
+        if (visited === "true") {
+          const userEmail = localStorage.getItem("email");
+          const userTeamName = localStorage.getItem("teamName");
+
+          const userInTop10 = top10.some(
+            (team) => team.email === userEmail || team.teamName === userTeamName
+          );
+
+       
+          if (userInTop10) {
+            setDashboardMessage(
+              `🎉 Congratulations ${userTeamName}, you are eligible for Round 2!`
+            );
+          } else {
+            setDashboardMessage(
+              `👏 Nice try ${userTeamName}, better luck next time!`
+            );
+          }
+        }
       } catch (err) {
         console.error("Failed to fetch leaderboard data:", err);
       }
     };
+  
     fetchLeaderboard();
   }, [teamName]);
 
   const openModal = (content) => {
     const email = localStorage.getItem("email");
-
-    
 
     if (content.includes("Round 1") && round1Submitted) {
       return alert(
@@ -69,7 +94,6 @@ const Dashboard = () => {
     if (content.includes("Round 2") && !isEligibleForRound2) {
       return alert("You are not eligible for Round 2.");
     }
-
 
     setModalContent(content);
     setIsModalOpen(true);
@@ -90,6 +114,7 @@ const Dashboard = () => {
       modalContent.includes("Leaderboard") &&
       password === "30102209"
     ) {
+      localStorage.setItem("visitedLeaderboard", "true");
       navigate("/leader");
     } else if (
       modalContent.includes("Round 2") &&
@@ -106,33 +131,32 @@ const Dashboard = () => {
     closeModal();
   };
 
-
-
   const handleLogout = () => setIsLogoutModalOpen(true);
 
-const handleLogoutConfirm = () => {
-  // Remove user data from localStorage or sessionStorage
-  localStorage.removeItem('user'); // or sessionStorage.removeItem('user');
+  const handleLogoutConfirm = () => {
+    // Remove user data from localStorage or sessionStorage
+    localStorage.removeItem("user"); // or sessionStorage.removeItem('user');
+    
 
-  // Reset the user state (if using context or state management for auth)
-  setUser(null); // Update the user state (this could be from context)
+    // Reset the user state (if using context or state management for auth)
+    setUser(null); // Update the user state (this could be from context)
+    localStorage.setItem("visitedLeaderboard", "false");
 
-  // Show toast for successful logout
-  toast.success("Logout Successful!", {
-    position: "top-right",
-    autoClose: 3000,
-    hideProgressBar: true,
-  });
+    // Show toast for successful logout
+    toast.success("Logout Successful!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+    });
 
-  // Navigate to login page
-  navigate("/login");
+    // Navigate to login page
+    navigate("/login");
 
-  // Close the logout modal
-  setIsLogoutModalOpen(false);
-};
+    // Close the logout modal
+    setIsLogoutModalOpen(false);
+  };
 
-const handleLogoutCancel = () => setIsLogoutModalOpen(false);
-
+  const handleLogoutCancel = () => setIsLogoutModalOpen(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 p-4 sm:p-6">
@@ -216,6 +240,21 @@ const handleLogoutCancel = () => setIsLogoutModalOpen(false);
             </button>
           </div>
         ))}
+      </div>
+
+      <div>
+      {dashboardMessage && (
+  <div
+    className={`max-w-md mx-auto mt-6 px-6 py-4 border text-center animate-fade-in transition-all duration-300 ease-in-out ${
+      dashboardMessage.includes("Congratulations")
+        ? "bg-gradient-to-br from-green-100 to-blue-100 border-green-400 text-green-900"
+        : "bg-gradient-to-br from-red-100 to-yellow-100 border-red-400 text-red-900"
+    }`}
+  >
+    <h3 className="text-lg sm:text-xl font-semibold">{dashboardMessage}</h3>
+  </div>
+)}
+
       </div>
 
       {/* Logout Button */}
