@@ -256,6 +256,16 @@ useEffect(() => {
 
   preloadImages();
   initializeUser();
+
+
+
+  const storedAnswers = localStorage.getItem("round1Answers");
+if (storedAnswers) {
+  setSelectedOptions(JSON.parse(storedAnswers));
+}
+
+
+
 }, []);
 
  
@@ -274,11 +284,16 @@ useEffect(() => {
   }, [timer]);
 
   const handleOptionSelect = (option) => {
-    setSelectedOptions((prev) => ({
-      ...prev,
-      [questions[currentQuestionIndex].id]: option,
-    }));
+    const questionId = questions[currentQuestionIndex].id;
+    const updatedOptions = {
+      ...selectedOptions,
+      [questionId]: option,
+    };
+  
+    setSelectedOptions(updatedOptions);
+    localStorage.setItem("round1Answers", JSON.stringify(updatedOptions));
   };
+  
 
   const calculateScore = () => {
     let tempScore = 0;
@@ -304,6 +319,8 @@ useEffect(() => {
 
       // localstorage me true
       localStorage.setItem("round1Submitted", "true");
+      localStorage.removeItem("round1Answers");
+
     } catch (error) {
       console.error("Error submitting:", error);
       toast.error("Failed to submit!");
@@ -355,6 +372,9 @@ useEffect(() => {
   };
 
   if (questions.length === 0) return null;
+
+
+
 
   return (
    
