@@ -43,6 +43,13 @@ app.listen(PORT, () => {
 });
 
 
+// In your Express app (e.g., index.js or app.js)
+app.get('/ping', (req, res) => {
+  res.send('Server is awake!');
+});
+
+
+
 app.get('/', (req, res) => {
   res.send('Backend server is running');
 });
