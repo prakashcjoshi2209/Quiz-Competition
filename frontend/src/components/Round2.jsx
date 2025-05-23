@@ -39,10 +39,10 @@ const Round2 = () => {
           <div className="space-y-4">
             {[
               "Simple Array Sum",
-              "Staircase",
               "Solve me first",
-              "Plus minus",
-              "Birthday Cake Candles",
+              "Find Factorial",
+              "Print Triangle",
+              "Raju Ka Bank Balance",
             ].map((title, index) => (
               <div
                 key={index}
